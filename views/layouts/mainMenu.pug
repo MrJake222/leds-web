@@ -1,0 +1,13 @@
+extends main.pug
+
+mixin generateMenu(tab)
+    ul
+        for entry in tab
+            li(onmouseenter="submenuHover(event)", onmouseleave="submenuHover(event)")
+                a(href=entry.href)= entry.title
+
+                if entry.sub
+                    +generateMenu(entry.sub)
+
+block nav
+    +generateMenu(menu)

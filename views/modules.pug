@@ -1,0 +1,26 @@
+extends layouts/mainMenu.pug
+
+block head
+    link(rel='stylesheet', href='css/modules.css')
+    
+    title
+        |Modules
+
+block header
+    h1
+        |Modules
+
+block main
+    for mod in mods
+        div.mod
+            header
+                a.name(href="module?id="+mod.id)= mod.name
+                div.address
+                    |0x#{toHex(mod.address)}
+
+            table
+                for prop, index in mod
+                    if index != "name" && index != "address"
+                        tr
+                            td.prop= index
+                            td.value= prop

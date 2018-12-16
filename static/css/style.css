@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: initial;
+}
+
+/* Menu main element */
+ul {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+
+    list-style-type: none;
+    position: relative;
+}
+
+/* Menu's entry */
+li {
+    height: 40px;
+
+    text-align: center;     
+
+    transition: 400ms background;
+}
+
+li:hover {
+    background: #bdd9f2
+}
+
+li>a {
+    display: block;
+    box-sizing: border-box;
+    padding: 12px;
+
+    width: 100%;
+    height: 100%;
+}
+
+/* Submenu */
+li ul {
+    position: relative;
+    background: #d5e6f5;
+
+    top: -100%;
+    left: 100%;
+
+    display: none;
+}
+
+/* ---------------------------------------------------------------------------- */
+
+html, body {
+    height: 100%;
+}
+
+body>header {
+    background: #cbdeef;
+
+    height: 66px;
+    box-sizing: border-box;
+
+    padding-top: 6px;
+    padding-bottom: 24px;
+    text-align: center;
+}
+
+/* Nav + Main */
+.content {
+    min-height: calc(100% - 66px);
+
+    display: flex;
+    flex-direction: row;
+}
+
+nav {
+    background: #d5e6f5;
+
+    width: 200px;
+}
+
+main {
+    background: #E9EFF5;
+    width: 100%;
+
+    padding: 18px;
+}

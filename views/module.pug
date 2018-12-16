@@ -1,0 +1,19 @@
+extends layouts/mainMenu.pug
+
+block head
+    link(rel='stylesheet', href='css/module.css')
+
+    title
+        |#{module.name} @ 0x#{toHex(module.address)}
+
+block header
+    h1
+        |#{module.name}
+
+block main
+    table
+        for prop in properties
+            tr
+                td.name= prop.name
+                td.value
+                    input(type=prop.type, name=prop.name, min=prop.min, max=prop.max, step=prop.step)
