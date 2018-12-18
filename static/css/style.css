@@ -57,23 +57,23 @@ html, body {
     height: 100%;
 }
 
-body>header {
-    background: #cbdeef;
-
-    height: 66px;
-    box-sizing: border-box;
-
-    padding-top: 6px;
-    padding-bottom: 24px;
-    text-align: center;
-}
-
-/* Nav + Main */
-.content {
-    min-height: calc(100% - 66px);
-
+body {
     display: flex;
     flex-direction: row;
+}
+
+.content {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.content>header {
+    padding: 9px;
+
+    text-align: center;
+    background: #cbdeef;
 }
 
 nav {
@@ -84,7 +84,5 @@ nav {
 
 main {
     background: #E9EFF5;
-    width: 100%;
-
-    padding: 18px;
-}
+    flex-grow: 1;
+} 

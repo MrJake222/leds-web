@@ -1,68 +1,48 @@
-/* Main container for modules */
 main {
     display: flex;
-
     flex-flow: row wrap;
-    align-content: flex-start;
+
+    justify-content: space-evenly;
+    align-items: flex-start;
+
+    padding: 0;
 }
 
-/* Single module */
-.mod {
-    width: 350px;
+section {
+    width: 400px;
+    margin: 12px 0;
 
-    margin: 10px;
-
-    border: 1px solid black;
+    border: 1px solid gray;
 }
 
-/* Header with name and address */
-.mod header {
+section header {
     background: #cbdeef;
 
-    display: flex;
-    flex-direction: row;
+    text-align: center;
+    font-size: 18px;
+    color: #09244d;
+
+    padding: 12px 8px;
+    margin-bottom: 12px;
 }
 
-/* Module's name */
-.name {
-    width: 80%;
-    padding: 2px 6px;
-    padding-bottom: 6px;
-
-    font-size: 28px;
+.bold {
+    text-transform: capitalize;
     font-weight: bold;
 }
 
-/* Address on far right */
-.address {
-    width: 20%;
-    padding: 0px 1px;
-
-    font-size: 18px;
-    text-align: right;
+.rangeName {
+    padding: 8px;
+    padding-bottom: 0px;
 }
 
-/* Table of properties */
-.mod table {
-    width: 100%;
-
-    padding: 20px;
+.right {
+    float: right;
+    font-size: 14px;
 }
 
-.prop, .value {
-    width: 50%;
-    padding: 0 20px;
+input[type=range] {
+    width: calc(100% - 24px);
 
-    font-size: 24px;
-}
-
-/* Property name */
-.prop {
-    text-align: right;
-    text-transform: capitalize;
-}
-
-/* Property value */
-.value {
-    text-align: right;
+    margin: 12px; 
 }

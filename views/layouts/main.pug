@@ -9,6 +9,8 @@
 doctype html
 head
     meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
 
     link(rel='stylesheet', href='css/style.css')
 
@@ -18,12 +20,12 @@ head
     block head
 
 body
-    header
-        block header
-    
-    div.content
-        nav
-            block nav
+    nav
+        block nav
+
+    .content
+        header
+            block header
         
         main
             block main

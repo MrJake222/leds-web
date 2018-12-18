@@ -2,7 +2,8 @@ extends layouts/mainMenu.pug
 
 block head
     link(rel='stylesheet', href='css/modules.css')
-    
+    script(src="js/range.js")
+
     title
         |Modules
 
@@ -12,15 +13,13 @@ block header
 
 block main
     for mod in mods
-        div.mod
-            header
-                a.name(href="module?id="+mod.id)= mod.name
-                div.address
-                    |0x#{toHex(mod.address)}
+        section
+                header
+                    div.bold= mod.modName
 
-            table
-                for prop, index in mod
-                    if index != "name" && index != "address"
-                        tr
-                            td.prop= index
-                            td.value= prop
+                for prop in properties[mod.modModel].inputs
+                    div.row
+                        div.bold.rangeName(style="color: "+prop.color)= prop.displayName
+                            span.right= mod.modValues[prop.name]
+                        
+                        input(type=prop.type, name=prop.name, min=1, max=255, step=1, value=mod.modValues[prop.name], oninput="valChange(event)")
