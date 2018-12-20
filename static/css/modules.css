@@ -1,3 +1,4 @@
+/* Main div (sybling to header and nav) */
 main {
     display: flex;
     flex-flow: row wrap;
@@ -8,6 +9,7 @@ main {
     padding: 0;
 }
 
+/* One module */
 section {
     width: 400px;
     margin: 12px 0;
@@ -15,6 +17,7 @@ section {
     border: 1px solid gray;
 }
 
+/* Header of the module(Name and delete) */
 section header {
     background: #cbdeef;
 
@@ -22,27 +25,39 @@ section header {
     font-size: 18px;
     color: #09244d;
 
-    padding: 12px 8px;
+    padding: 4px;
     margin-bottom: 12px;
 }
 
+/* Bolding class */
 .bold {
     text-transform: capitalize;
     font-weight: bold;
 }
 
+/* Range name and value */
 .rangeName {
     padding: 8px;
     padding-bottom: 0px;
 }
 
+/* Value */
 .right {
     float: right;
     font-size: 14px;
 }
 
+/* Range */
 input[type=range] {
     width: calc(100% - 24px);
 
     margin: 12px; 
+}
+
+/* The Big X */
+.delete {
+    cursor: pointer;
+
+    font-size: 18px;
+    line-height: 18px;
 }

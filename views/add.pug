@@ -1,0 +1,27 @@
+extends layouts/mainMenu.pug
+
+block head
+    link(rel='stylesheet', href='css/add.css')
+
+    title
+        |Add a module
+
+block header
+    h1
+        |Add a module
+
+block main
+    form(method="POST")
+        div.inputs
+            for field in fields
+                section
+                    div.name= field.displayName
+
+                    if (field.type == "select")
+                        select(name=field.name)
+                            for opt in field.options
+                                option(value=opt.id)= opt.title
+                    else
+                        input(type=field.type, name=field.name)
+
+        input.submit(type="submit", value="Add")

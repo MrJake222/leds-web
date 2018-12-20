@@ -1,3 +1,6 @@
 function submenuHover(ev) {
-    $(ev.target).children("ul").fadeToggle(ev.type == "mouseenter" ? 400 : 200)
+    var el = $(ev.target).children("ul")
+
+    el.stop()
+    el.slideToggle(ev.type == "mouseenter" ? 400 : 200)
 }
