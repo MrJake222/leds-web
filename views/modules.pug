@@ -3,7 +3,7 @@ extends layouts/mainMenu.pug
 block head
     link(rel='stylesheet', href='css/modules.css')
     script(src="js/range.js")
-    script(src="js/modules.js")
+    script(src="js/ajax.js")
 
     title= groupName
 
@@ -11,9 +11,9 @@ block header
     div.bold
         span= groupName
         a.inline-icon.right.delete(title="Delete group", onclick="deleteGroup('"+groupID+"')") 🗙
-        a.inline-icon.right(title="Add module to this group", href="/addModule?groupID="+groupID) 🞤
-        a.inline-icon.right(title="Duplicate group", href="/addGroup?groupName="+groupName) ⎘
-        a.inline-icon.right(title="Edit group", href="/editGroup?groupID="+groupID) ✎
+        a.inline-icon.right(title="Add module to this group", href="/modifyModule?action=groupAdd&groupID="+groupID) 🞤
+        a.inline-icon.right(title="Duplicate group", href="/modifyGroup?action=Duplicate&groupID="+groupID) ⎘
+        a.inline-icon.right(title="Modify group", href="/modifyGroup?action=Modify&groupID="+groupID) ✎
 
 
 block main
@@ -22,12 +22,12 @@ block main
                 header.bold
                     span(title="Address: "+mod.modAddress+"\nModel: "+mod.modModel)= mod.modName
                     a.inline-icon.right.delete(title="Delete module", onclick="deleteModule('"+mod._id+"')") 🗙
-                    a.inline-icon.right(title="Duplicate module", href="/addModule?modName="+mod.modName+"&modAddress="+mod.modAddress+"&modModel="+mod.modModel+"&groupID="+mod.groupID) ⎘
-                    a.inline-icon.right(title="Edit module", href="/editModule?modID="+mod._id) ✎
+                    a.inline-icon.right(title="Duplicate module", href="/modifyModule?action=Duplicate&modID="+mod._id) ⎘
+                    a.inline-icon.right(title="Modify module", href="/modifyModule?action=Modify&modID="+mod._id) ✎
 
                 for prop in properties[mod.modModel].inputs
                     div.row
-                        div.bold.rangeName(style="color: "+prop.color+" !important")= prop.displayName
+                        div.bold.rangeName(style="color: "+prop.color)= prop.displayName
                             span.right= mod[prop.name]
                         
                         input(type=prop.type, name=prop.name, min=0, max=255, step=1, oninput="valChange(event)")

@@ -1,0 +1,19 @@
+extends layouts/mainMenu.pug
+
+block head
+    link(rel='stylesheet', href='css/modules.css')
+
+    title Groups
+
+block header
+    div.bold
+        span Groups
+
+
+block main
+    table
+        for group in groups
+            tr
+                td= group.groupName
+                td
+                    button Delete

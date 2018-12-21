@@ -24,7 +24,8 @@ block main
                                     option(value=opt.id)= opt.title
                     else
                         input(type=field.type, name=field.name, value=field.value)
+        
 
-        if submit == "Save"
-            input(type="hidden", name="id", value=id)
+        for hid in hidden
+            input(type="hidden", name=hid.name, value=hid.value)
         input.submit(type="submit", value=submit)
