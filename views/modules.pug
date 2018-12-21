@@ -30,7 +30,8 @@ block main
                         div.bold.rangeName(style="color: "+prop.color)= prop.displayName
                             span.right= mod[prop.name]
                         
-                        input(type=prop.type, name=prop.name, min=0, max=255, step=1, oninput="valChange(event)")
+                        //- input(type=prop.type, name=prop.name, min=0, max=255, step=1, oninput="valChange(event, '" + mod._id + "', '" + prop.name + "')")
+                        input(type=prop.type, name=prop.name, min=0, max=255, step=1, oninput="updateLeds(event, '"+ mod._id +"', '"+ prop.name +"')", onchange="updateLeds(event, '"+ mod._id +"', '"+ prop.name +"')")
 
     script.
         updateRanges()

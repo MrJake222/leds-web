@@ -1,10 +1,3 @@
-function valChange(ev) {
-    var range = $(ev.target)
-    var value = range.prev().children().first()
-    
-    value.html(range.val())
-}
-
 function updateRanges() {
     $("section").each(function(index, obj) {
         $(obj).children(".row").each(function(index2, obj2) {
@@ -20,4 +13,22 @@ function updateRanges() {
             $(input).val(value.innerHTML)
         })
     })
+}
+
+function updateLeds(ev, modID, name) {
+    var range = $(ev.target)
+    var value = range.prev().children().first()
+    
+    value.html(range.val())
+
+    // ----------------------------------------------- //
+    var data = {
+        modID: modID,
+        database: ev.type == "change",
+        update: {}
+    }
+
+    data.update[name] = range.val()
+
+    $.post("/updateLeds", data)
 }

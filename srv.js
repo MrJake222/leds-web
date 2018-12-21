@@ -17,7 +17,6 @@ var definitions = require("./definitions")
 var baseMenu = [
     {
         title: "Groups",
-        href: "/group",
         sub: []
     },
 
@@ -85,15 +84,18 @@ app.get("/", function(req, res) {
 app.get("/group", function(req, res) {
 
     if (req.query.groupID) {
-        // Gets group's name
+        // Get group's name
         dbGroups.find({ _id: req.query.groupID }, function(errGroup, docsGroup) {
             // console.log(docsGroup)
 
-            // Gets list of modules in this group
+            // Get list of modules in this group
             dbModules.find({ groupID: req.query.groupID }, function(err, docs) {
                 // console.log(docs)
+                docs.sort(function(a, b) {
+                    return a.modAddress - b.modAddress
+                })
 
-                // Generates menu
+                // Generate menu
                 generateMenu(function() {
                     res.render("modules", {
                         menu: baseMenu,
@@ -269,11 +271,11 @@ app.get("/modifyGroup", function (req, res) {
 })
 
 app.post("/modifyModule", function(req, res) {
-    console.log(req.body)
+    // console.log(req.body)
 
     var data = {
         modName: req.body.modName,
-        modAddress: req.body.modAddress,
+        modAddress: parseInt(req.body.modAddress),
         modModel: req.body.modModel,
         groupID: req.body.groupID
     }
@@ -293,7 +295,7 @@ app.post("/modifyModule", function(req, res) {
             break
 
         case "modify":
-            dbModules.update({ _id: req.body.modID }, data, function() {
+            dbModules.update({ _id: req.body.modID }, { $set: data }, {}, function() {
                 res.redirect("/group?groupID="+req.body.groupID) 
             })
 
@@ -309,7 +311,7 @@ app.post("/modifyModule", function(req, res) {
 })
 
 app.post("/modifyGroup", function (req, res) {
-    console.log(req.body)
+    // console.log(req.body)
 
     switch (req.body.action.toLowerCase()) {
         case "add":
@@ -321,9 +323,7 @@ app.post("/modifyGroup", function (req, res) {
             break
 
         case "modify":
-            dbGroups.update({ _id: req.body.groupID }, {
-                groupName: req.body.groupName
-            }, function() {
+            dbGroups.update({ _id: req.body.groupID }, { $set: { groupName: req.body.groupName } }, {}, function() {
                 res.redirect("/group?groupID="+req.body.groupID) 
             })
 
@@ -338,4 +338,15 @@ app.post("/modifyGroup", function (req, res) {
             
             break
     }
+})
+
+// ----------------------------------------------------------------------------- //
+app.post("/updateLeds", function(req, res) {
+    for (let key in req.body.update)
+        req.body.update[key] = parseInt(req.body.update[key])
+
+    if (req.body.database == "true")
+        dbModules.update({ _id: req.body.modID }, { $set: req.body.update }, {})
+
+    res.send("")
 })
