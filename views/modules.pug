@@ -9,22 +9,28 @@ block head
 
 block header
     div.bold
-        span.groupName= groupName
-        a.delete.right(onclick="deleteGroup('"+groupID+"')") 🗙
+        span= groupName
+        a.inline-icon.right.delete(title="Delete group", onclick="deleteGroup('"+groupID+"')") 🗙
+        a.inline-icon.right(title="Add module to this group", href="/addModule?groupID="+groupID) 🞤
+        a.inline-icon.right(title="Duplicate group", href="/addGroup?groupName="+groupName) ⎘
+        a.inline-icon.right(title="Edit group", href="/editGroup?groupID="+groupID) ✎
+
 
 block main
     for mod in mods
         section
-                header
-                    div.bold= mod.modName
-                        a.delete.right(onclick="deleteModule('"+mod._id+"')") 🗙
+                header.bold
+                    span(title="Address: "+mod.modAddress+"\nModel: "+mod.modModel)= mod.modName
+                    a.inline-icon.right.delete(title="Delete module", onclick="deleteModule('"+mod._id+"')") 🗙
+                    a.inline-icon.right(title="Duplicate module", href="/addModule?modName="+mod.modName+"&modAddress="+mod.modAddress+"&modModel="+mod.modModel+"&groupID="+mod.groupID) ⎘
+                    a.inline-icon.right(title="Edit module", href="/editModule?modID="+mod._id) ✎
 
                 for prop in properties[mod.modModel].inputs
                     div.row
-                        div.bold.rangeName(style="color: "+prop.color)= prop.displayName
+                        div.bold.rangeName(style="color: "+prop.color+" !important")= prop.displayName
                             span.right= mod[prop.name]
                         
-                        input(type=prop.type, name=prop.name, min=1, max=255, step=1, oninput="valChange(event)")
+                        input(type=prop.type, name=prop.name, min=0, max=255, step=1, oninput="valChange(event)")
 
     script.
         updateRanges()

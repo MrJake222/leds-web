@@ -1,11 +1,15 @@
 * {
     margin: 0;
     padding: 0;
+
+    /* font-size: 18px; */
 }
 
 a {
     text-decoration: none;
-    color: initial;
+    /* color: initial; */
+    font-size: 18px;
+    color: #09244d;
     /* cursor: pointer; */
 }
 
@@ -76,8 +80,22 @@ body {
     text-align: center;
     background: #cbdeef;
 
-    color: #09244d;
     font-size: 24px;
+}
+
+header span {
+    display: inline-block;
+    color: #09244d;
+
+    padding: 5px;
+}
+
+.inline-icon {
+    padding: 2px 4px;
+}
+
+.inline-icon:nth-child(2) {
+    padding-right: 0;
 }
 
 nav {
@@ -94,21 +112,26 @@ main {
 } 
 
 /* The Big X */
-.delete {
+.inline-icon {
     cursor: pointer;
 
-    font-size: 18px;
-    line-height: 18px;
+    font-size: 14px;
+    line-height: 14px;
 }
 
 /* Value and X */
 .right {
     float: right;
-    font-size: 14px;
+    /* font-size: 14px; */
 }
 
 /* Bolding class */
 .bold {
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     font-weight: bold;
+}
+
+.delete {
+    position: relative;
+    bottom: 1px;
 }

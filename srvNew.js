@@ -108,25 +108,6 @@ app.get("/group", function(req, res) {
             })
         })
     })
-
-    /* con.query("SELECT modID, modName, modAddress, modModel, modValues FROM modules WHERE modules.groupID="+req.query.id+";", function(err, queryRes) {
-        if (err) throw err
-
-        for (let i=0; i<queryRes.length; i++) {
-            queryRes[i].modValues = JSON.parse(queryRes[i].modValues)
-        }
-        
-        generateMenu(function() {
-            res.render("modules", {
-                menu: baseMenu,
-                
-                groupName: baseMenu[0].sub[req.query.id-1].title,
-
-                mods: queryRes,
-                properties: definitions.getModelsInputs(),
-            })
-        })
-    }) */
 })
 
 app.get("/addModule", function(req, res) {
@@ -146,24 +127,28 @@ app.get("/addModule", function(req, res) {
             menu: baseMenu, 
             
             title: "Add module",
+            submit: "Add",
 
             fields: [
                 {
                     displayName: "Name",
                     name: "modName",
-                    type: "text"
+                    type: "text",
+                    value: req.query.modName
                 },
 
                 {
                     displayName: "Address",
                     name: "modAddress",
-                    type: "number"
+                    type: "number",
+                    value: req.query.modAddress
                 },
 
                 {
                     displayName: "Model",
                     name: "modModel",
                     type: "select",
+                    value: req.query.modModel,
                     options: models,
                 },
 
@@ -171,6 +156,7 @@ app.get("/addModule", function(req, res) {
                     displayName: "Group",
                     name: "groupID",
                     type: "select",
+                    value: req.query.groupID,
                     options: baseMenu[0].sub
                 },
             ]
@@ -179,8 +165,6 @@ app.get("/addModule", function(req, res) {
 })
 
 app.post("/addModule", function(req, res) {
-    // console.log(req.body)
-
     console.log(definitions.getModelsInputs()[req.body.modModel])
 
     definitions.getModelsInputs()[req.body.modModel].inputs.forEach(function(e) {
@@ -191,35 +175,87 @@ app.post("/addModule", function(req, res) {
 
     dbModules.insert(req.body, function(err, docs) {
         res.redirect("back")
+    })   
+})
+
+app.get("/editModule", function (req, res) {
+    var modKeys = Object.keys(definitions.getModelsInputs())
+
+    var models = []
+
+    modKeys.forEach(function(e) {
+        models.push({
+            title: e,
+            id: e
+        })
     })
 
-    /* con.query("INSERT INTO modules (modName, modAddress, modModel, groupID, modValues) VALUES(\""
-        + req.body.modName + "\"," 
-        + req.body.modAddress + ",\"" 
-        + req.body.modModel + "\"," 
-        + req.body.groupID + "," 
-        + '\'{"red": 0, "green": 0, "blue": 0}\');',
-        
-        function(err, queryRes) {
-            if (err) throw err
+    dbModules.find({ _id: req.query.modID }, function(errGroup, docsGroup) {
+        generateMenu(function() {
+            res.render("add", {
+                menu: baseMenu, 
+                
+                title: "Add module",
+                submit: "Add",
+    
+                fields: [
+                    {
+                        displayName: "Name",
+                        name: "modName",
+                        type: "text",
+                        value: docsGroup[0].modName
+                    },
+    
+                    {
+                        displayName: "Address",
+                        name: "modAddress",
+                        type: "number",
+                        value: docsGroup[0].modAddress
+                    },
+    
+                    {
+                        displayName: "Model",
+                        name: "modModel",
+                        type: "select",
+                        value: docsGroup[0].modModel,
+                        options: models,
+                    },
+    
+                    {
+                        displayName: "Group",
+                        name: "groupID",
+                        type: "select",
+                        value: docsGroup[0].groupID,
+                        options: baseMenu[0].sub
+                    },
+                ]
+            })
+        })
+    })
+})
 
-            console.log("Inserted")
+app.post("/editGroup", function (req, res) {
+    // console.log(req.body)
 
-            res.redirect("back")
-        }
-    ) */    
+    dbGroups.update({ _id: req.body.id }, {
+        groupName: req.body.groupName
+    }, function() {
+       res.redirect("/group?id="+req.body.id) 
+    })
 })
 
 app.post("/delModule", function(req, res) {
     dbModules.remove({
         _id: req.body.id
+    }, function() {
+        res.redirect("back")
     })
 
     /* con.query("DELETE FROM modules WHERE modID="+req.body.id+";", function(err, queryRes) {
         if (err) throw err
     }) */
 
-    res.redirect("back")
+    //res.redirect("back")
 })
 
 app.get("/addGroup", function (req, res) {
@@ -228,15 +264,51 @@ app.get("/addGroup", function (req, res) {
             menu: baseMenu, 
             
             title: "Add group",
+            submit: "Add",
 
             fields: [
                 {
                     displayName: "Name",
                     name: "groupName",
-                    type: "text"
+                    type: "text",
+                    value: req.query.groupName
                 }
             ]
         })
+    })
+})
+
+app.get("/editGroup", function (req, res) {
+    dbGroups.find({ _id: req.query.groupID }, function(errGroup, docsGroup) {
+        generateMenu(function() {
+            res.render("add", {
+                menu: baseMenu, 
+                
+                title: "Modify group",
+
+                submit: "Save",
+                id: req.query.groupID,
+
+                fields: [
+                    {
+                        displayName: "Name",
+                        name: "groupName",
+                        type: "text",
+                        value: docsGroup[0].groupName
+                    }
+                ]
+            })
+        })
+    })
+})
+
+app.post("/editGroup", function (req, res) {
+    // console.log(req.body)
+
+    dbGroups.update({ _id: req.body.id }, {
+        groupName: req.body.groupName
+    }, function() {
+       res.redirect("/group?id="+req.body.id) 
     })
 })
 

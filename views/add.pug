@@ -6,7 +6,7 @@ block head
     title= title
 
 block header
-    h1= title
+    span.bold(style="padding: 5px")= title
 
 block main
     form(method="POST")
@@ -18,8 +18,13 @@ block main
                     if (field.type == "select")
                         select(name=field.name)
                             for opt in field.options
-                                option(value=opt.id)= opt.title
+                                if (opt.id == field.value)
+                                    option(value=opt.id, selected="selected")= opt.title
+                                else
+                                    option(value=opt.id)= opt.title
                     else
-                        input(type=field.type, name=field.name)
+                        input(type=field.type, name=field.name, value=field.value)
 
-        input.submit(type="submit", value="Add")
+        if submit == "Save"
+            input(type="hidden", name="id", value=id)
+        input.submit(type="submit", value=submit)

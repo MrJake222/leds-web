@@ -43,9 +43,3 @@ input[type=range] {
 input[type=range]::-moz-focus-outer {
     border: 0;
 }
-
-.groupName {
-    display: inline-block;
-
-    padding: 5px;
-}
