@@ -6,7 +6,7 @@ mixin generateMenu(tab)
             li(onmouseenter="submenuHover(event)", onmouseleave="submenuHover(event)")
                 a(href=entry.href)= entry.title
 
-                if entry.sub
+                if entry.sub && entry.sub.length > 0
                     +generateMenu(entry.sub)
 
 block nav

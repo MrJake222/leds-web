@@ -5,14 +5,12 @@ main {
 
     justify-content: space-evenly;
     align-items: flex-start;
-
-    padding: 0;
 }
 
 /* One module */
 section {
     width: 400px;
-    margin: 12px 0;
+    /* margin: 12px 0; */
 
     border: 1px solid gray;
 }
@@ -29,22 +27,10 @@ section header {
     margin-bottom: 12px;
 }
 
-/* Bolding class */
-.bold {
-    text-transform: capitalize;
-    font-weight: bold;
-}
-
 /* Range name and value */
 .rangeName {
     padding: 8px;
     padding-bottom: 0px;
-}
-
-/* Value */
-.right {
-    float: right;
-    font-size: 14px;
 }
 
 /* Range */
@@ -54,10 +40,12 @@ input[type=range] {
     margin: 12px; 
 }
 
-/* The Big X */
-.delete {
-    cursor: pointer;
+input[type=range]::-moz-focus-outer {
+    border: 0;
+}
 
-    font-size: 18px;
-    line-height: 18px;
+.groupName {
+    display: inline-block;
+
+    padding: 5px;
 }

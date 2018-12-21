@@ -21,7 +21,7 @@ ul {
 
 /* Menu's entry */
 li {
-    height: 40px;
+    height: 44px;
 
     text-align: center;     
 
@@ -71,10 +71,13 @@ body {
 }
 
 .content>header {
-    padding: 9px;
+    padding: 4px;
 
     text-align: center;
     background: #cbdeef;
+
+    color: #09244d;
+    font-size: 24px;
 }
 
 nav {
@@ -86,4 +89,26 @@ nav {
 main {
     background: #E9EFF5;
     flex-grow: 1;
+
+    padding: 12px;
 } 
+
+/* The Big X */
+.delete {
+    cursor: pointer;
+
+    font-size: 18px;
+    line-height: 18px;
+}
+
+/* Value and X */
+.right {
+    float: right;
+    font-size: 14px;
+}
+
+/* Bolding class */
+.bold {
+    text-transform: capitalize;
+    font-weight: bold;
+}

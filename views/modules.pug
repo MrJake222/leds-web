@@ -8,20 +8,21 @@ block head
     title= groupName
 
 block header
-    h1= groupName
+    div.bold
+        span.groupName= groupName
+        a.delete.right(onclick="deleteGroup('"+groupID+"')") 🗙
 
 block main
     for mod in mods
         section
                 header
                     div.bold= mod.modName
-                        a.delete.right(onclick="deleteModule("+mod.modID+")")
-                            |🗙
+                        a.delete.right(onclick="deleteModule('"+mod._id+"')") 🗙
 
                 for prop in properties[mod.modModel].inputs
                     div.row
                         div.bold.rangeName(style="color: "+prop.color)= prop.displayName
-                            span.right= mod.modValues[prop.name]
+                            span.right= mod[prop.name]
                         
                         input(type=prop.type, name=prop.name, min=1, max=255, step=1, oninput="valChange(event)")
 

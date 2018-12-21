@@ -26,51 +26,55 @@ var baseMenu = [
         sub: [
             {
                 title: "Add module",
-                href: "/add"
+                href: "/addModule"
             },
 
             {
-                title: "Autodetect modules"
-            }
+                title: "Add group",
+                href: "/addGroup"
+            },
         ]
     }
 ]
+
 // ----------------------------------------------------------------------------- //
 var modules = []
 
-var mysql = require('mysql');
+var Datastore = require("nedb")
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "leds",
-    password: "12345",
-    database: "leds"
-});
+dbGroups = new Datastore({
+    filename: "db/groups.db",
+    autoload: true
+})
 
-con.connect(function(err) {
-    console.log("SQL Connected")
+dbModules = new Datastore({
+    filename: "db/modules.db",
+    autoload: true
+})
 
-    if (err) throw err
-});
 // ----------------------------------------------------------------------------- //
 function generateMenu(callback) {
-    con.query("SELECT groupID, groupName FROM groups;", function(err, res) {
-        if (err) throw err
+    dbGroups.find({}, function(err, docs) {
 
-        // console.log(res)
+        // baseMenu[0].sub.splice(1, baseMenu[0].sub.length-1)
         baseMenu[0].sub = []
 
-        res.forEach(function(e) {
+        docs.forEach(function(e) {
             baseMenu[0].sub.push({
                 title: e.groupName,
-                href: "/group?id=" + e.groupID,
-                id: e.groupID
+                href: "/group?id=" + e._id,
+
+                // For listing in "Add module" page
+                id: e._id
             })
         })
+        
+        // console.log(baseMenu)
 
         callback()
     })
 }
+
 // ----------------------------------------------------------------------------- //
 app.get("/", function(req, res) {
     generateMenu(function() {
@@ -81,9 +85,31 @@ app.get("/", function(req, res) {
 })
 
 app.get("/group", function(req, res) {
-    console.log("Rendering id = " + req.query.id)
 
-    con.query("SELECT modID, modName, modAddress, modModel, modValues FROM modules WHERE modules.groupID="+req.query.id+";", function(err, queryRes) {
+    // Gets group's name
+    dbGroups.find({ _id: req.query.id }, function(errGroup, docsGroup) {
+        // console.log(docsGroup)
+
+        // Gets list of modules in this group
+        dbModules.find({ groupID: req.query.id }, function(err, docs) {
+            // console.log(docs)
+
+            // Generates menu
+            generateMenu(function() {
+                res.render("modules", {
+                    menu: baseMenu,
+                    
+                    groupID: docsGroup[0]._id,
+                    groupName: docsGroup[0].groupName,
+
+                    mods: docs,
+                    properties: definitions.getModelsInputs(),
+                })
+            })
+        })
+    })
+
+    /* con.query("SELECT modID, modName, modAddress, modModel, modValues FROM modules WHERE modules.groupID="+req.query.id+";", function(err, queryRes) {
         if (err) throw err
 
         for (let i=0; i<queryRes.length; i++) {
@@ -100,13 +126,12 @@ app.get("/group", function(req, res) {
                 properties: definitions.getModelsInputs(),
             })
         })
-    })
+    }) */
 })
 
-app.get("/add", function(req, res) {
+app.get("/addModule", function(req, res) {
     var modKeys = Object.keys(definitions.getModelsInputs())
 
-    var groups = []
     var models = []
 
     modKeys.forEach(function(e) {
@@ -118,7 +143,9 @@ app.get("/add", function(req, res) {
 
     generateMenu(function() {
         res.render("add", {
-            menu: baseMenu,        
+            menu: baseMenu, 
+            
+            title: "Add module",
 
             fields: [
                 {
@@ -151,10 +178,22 @@ app.get("/add", function(req, res) {
     })
 })
 
-app.post("/add", function(req, res) {
+app.post("/addModule", function(req, res) {
+    // console.log(req.body)
+
+    console.log(definitions.getModelsInputs()[req.body.modModel])
+
+    definitions.getModelsInputs()[req.body.modModel].inputs.forEach(function(e) {
+        req.body[e.name] = 0
+    })
+
     console.log(req.body)
 
-    con.query("INSERT INTO modules (modName, modAddress, modModel, groupID, modValues) VALUES(\""
+    dbModules.insert(req.body, function(err, docs) {
+        res.redirect("back")
+    })
+
+    /* con.query("INSERT INTO modules (modName, modAddress, modModel, groupID, modValues) VALUES(\""
         + req.body.modName + "\"," 
         + req.body.modAddress + ",\"" 
         + req.body.modModel + "\"," 
@@ -168,12 +207,52 @@ app.post("/add", function(req, res) {
 
             res.redirect("back")
         }
-    )    
+    ) */    
 })
 
-app.post("/del", function(req, res) {
-    con.query("DELETE FROM modules WHERE modID="+req.body.id+";", function(err, queryRes) {
+app.post("/delModule", function(req, res) {
+    dbModules.remove({
+        _id: req.body.id
+    })
+
+    /* con.query("DELETE FROM modules WHERE modID="+req.body.id+";", function(err, queryRes) {
         if (err) throw err
+    }) */
+
+    res.redirect("back")
+})
+
+app.get("/addGroup", function (req, res) {
+    generateMenu(function() {
+        res.render("add", {
+            menu: baseMenu, 
+            
+            title: "Add group",
+
+            fields: [
+                {
+                    displayName: "Name",
+                    name: "groupName",
+                    type: "text"
+                }
+            ]
+        })
+    })
+})
+
+app.post("/addGroup", function (req, res) {
+    dbGroups.insert(req.body, function(err, docs) {
+        res.redirect("back")
+    })
+})
+
+app.post("/delGroup", function (req, res) {
+    dbGroups.remove({
+        _id: req.body.id,
+    })
+
+    dbModules.remove({
+        groupID: req.body.id,
     })
 
     res.send("")

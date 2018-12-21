@@ -3,12 +3,10 @@ extends layouts/mainMenu.pug
 block head
     link(rel='stylesheet', href='css/add.css')
 
-    title
-        |Add a module
+    title= title
 
 block header
-    h1
-        |Add a module
+    h1= title
 
 block main
     form(method="POST")
