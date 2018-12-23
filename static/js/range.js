@@ -25,10 +25,11 @@ function updateLeds(ev, modID, name) {
     var data = {
         modID: modID,
         database: ev.type == "change",
-        update: {}
+        name: name,
+        value: range.val(),
     }
 
-    data.update[name] = range.val()
+    // data.update[name] = range.val()
 
     $.post("/updateLeds", data)
 }

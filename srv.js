@@ -341,12 +341,94 @@ app.post("/modifyGroup", function (req, res) {
 })
 
 // ----------------------------------------------------------------------------- //
-app.post("/updateLeds", function(req, res) {
-    for (let key in req.body.update)
-        req.body.update[key] = parseInt(req.body.update[key])
+var modelRegisters = {
+    LEDRGB: {
+        red: 0x00,
+        green: 0x01,
+        blue:  0x02
+    }
+}
 
-    if (req.body.database == "true")
-        dbModules.update({ _id: req.body.modID }, { $set: req.body.update }, {})
+// ----------------------------------------------------------------------------- //
+var SerialPort = require("serialport")
+
+var serial = new SerialPort("/dev/ttyUSB1", {
+    autoOpen: true,
+    baudRate: 115200,
+    dataBits: 8,
+    parity: "even"
+})
+
+function calcCRC(data) {
+	var CRC = 0xFFFF;
+
+	data.forEach(function(e) {
+		CRC ^= (e & 0xFF);
+
+		for (let i=0; i<8; i++) {
+			var lsb = CRC & 0x01;
+
+			CRC >>= 1;
+
+			if (lsb)
+				CRC ^= 0xA001;
+		}
+	})
+
+	return CRC;
+}
+
+function to8Bit(int16) {
+    var lsb = int16 & 0xFF
+    var msb = (int16>>8) & 0xFF
+
+    return [msb, lsb]
+}
+
+function writeModule(address, data) {
+    var frame = [address].concat(data)
+    var crc = calcCRC(frame)
+
+    frame = frame.concat(to8Bit(crc).reverse())
+
+    var hex = ""
+    frame.forEach(function(e) {
+        var h = e.toString(16)
+        if (h.length < 2)
+            h = "0" + h
+
+        hex += h
+    })
+
+    console.log(hex)
+
+    serial.write(frame)
+}
+
+function writeSingleRegister(address, register16, value16) {
+    const func_code = 0x06
+
+    writeModule(address, [func_code].concat(to8Bit(register16)).concat(to8Bit(value16)))
+}
+
+// ----------------------------------------------------------------------------- //
+
+// ----------------------------------------------------------------------------- //
+app.post("/updateLeds", function(req, res) {
+    var update = {}
+    update[req.body.name] = parseInt(req.body.value)
+
+    if (req.body.database == "true") {
+        dbModules.update({ _id: req.body.modID }, { $set: update }, {})
+    }
+
+    // console.log(req.body.database)
+
+    //else {
+    dbModules.find({ _id: req.body.modID }, function(err, docs) {
+        writeSingleRegister(docs[0].modAddress, modelRegisters[docs[0].modModel][req.body.name], Math.round((req.body.value*req.body.value)/255))
+    })
+    //}
 
     res.send("")
 })
