@@ -24,7 +24,7 @@
 
     var modelsInputs = {
         LEDRGB: {
-            inputs: [inputDefs.redRange, inputDefs.greenRange, inputDefs.blueRange]
+            inputs: [inputDefs.redRange, inputDefs.greenRange, inputDefs.blueRange],
         }
     }
 

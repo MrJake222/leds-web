@@ -5,10 +5,9 @@ block head
 
     title= title
 
-block header
-    span.bold(style="padding: 5px")= title
-
 block main
+    header= title
+
     form(method="POST")
         div.inputs
             for field in fields

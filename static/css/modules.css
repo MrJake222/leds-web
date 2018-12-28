@@ -1,5 +1,5 @@
 /* Main div (sybling to header and nav) */
-main {
+.modules {
     display: flex;
     flex-flow: row wrap;
 
@@ -11,26 +11,51 @@ main {
 
 /* One module */
 section {
-    width: 400px;
-    margin: 12px;
+    width: 500px;
+    min-width: 240px;
 
-    border: 1px solid gray;
+    margin: 12px;
+    border: 1px solid #34393f;
+
+    /* background: rgba(255, 0, 0, 0.5); */
 }
 
 /* Header of the module(Name and delete) */
 section header {
-    background: #cbdeef;
+    color: white;
+    background: #34393F;
+
+    border-bottom: 8px solid #B3282C;
 
     text-align: center;
-    font-size: 18px;
-    color: #09244d;
+    font-size: 22px;
 
     padding: 4px;
-    margin-bottom: 12px;
+
+    position: relative;
+    /* border: 1px solid #34393f; */
+}
+
+span {
+    display: block;
+    padding: 3px;
+}
+
+.row {
+    padding: 0 6px;
+}
+
+.rows {
+    /* margin: 12px 0; */
+    padding: 6px 0;
+
+    border-top: 0;
 }
 
 /* Range name and value */
 .rangeName {
+    font-size: 1.5em;
+
     padding: 8px;
     padding-bottom: 0px;
 }
@@ -40,6 +65,7 @@ input[type=range] {
     width: calc(100% - 24px);
 
     margin: 12px; 
+    margin-top: 0;
 }
 
 input[type=range]::-moz-focus-outer {

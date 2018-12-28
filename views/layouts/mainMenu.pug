@@ -3,7 +3,7 @@ extends main.pug
 mixin generateMenu(tab)
     ul
         for entry in tab
-            li(onmouseenter="submenuHover(event)", onmouseleave="submenuHover(event)")
+            li(onmouseenter="submenuHover(event)", onmouseleave="submenuHover(event)", style=(entry.title == "Admin" ? "margin-left: auto" : ""))
                 a(href=entry.href)= entry.title
 
                 if entry.sub && entry.sub.length > 0
