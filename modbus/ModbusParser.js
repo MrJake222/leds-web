@@ -1,5 +1,5 @@
 const Transform = require('stream').Transform
-const modbusCrc = require("./modbus-crc")
+const FastCRC = require("./fastCRC")
 
 class ModbusParser extends Transform {
 	constructor() {
@@ -17,7 +17,7 @@ class ModbusParser extends Transform {
 		
 	
 		if (this.buffer.length > 4) {
-			if (modbusCrc.fastCRC(this.buffer)) {
+			if (FastCRC.fastCRC(this.buffer)) {
 				// console.log("crc ok")
 				this.push(this.buffer)
 
@@ -36,8 +36,8 @@ class ModbusParser extends Transform {
 	}
 }
 
-module.exports = ModbusParser
-module.exports.parseModbusFrame = function(frame) {
+// --------------------------------------------------------------------------------
+function parseModbusFrame(frame) {
 	//console.log(frame)
 	
 	var ret = {
@@ -58,4 +58,12 @@ module.exports.parseModbusFrame = function(frame) {
 
 	return ret
 }
+
+// --------------------------------------------------------------------------------
+module.exports = {
+	ModbusParser,
+	parseModbusFrame
+}
+
+
 

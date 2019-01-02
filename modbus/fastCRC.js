@@ -1,3 +1,4 @@
+/* Table of CRC values for high–order byte */
 const auchCRCHi = [
 	0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
 	0x40, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,
@@ -41,7 +42,8 @@ const auchCRCLo = [
     0x40
 ]
 
-module.exports.fastCRC = function(message) {
+// --------------------------------------------------------------------------------
+function fastCRC(message) {
     var uchCRCHi = 0xFF;
     var uchCRCLo = 0xFF;
     var uIndex;
@@ -53,4 +55,8 @@ module.exports.fastCRC = function(message) {
     }
 
     return [uchCRCHi, uchCRCLo]
+}
+
+module.exports = {
+    fastCRC
 }

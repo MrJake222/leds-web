@@ -72,7 +72,7 @@ function updateLeds(ev, modID, modModel, name) {
 
     // data.update[name] = range.val()
 
-    $.post("/updateLeds", data)
+    $.post("/updateValues", data)
 
 
     // ----------------------------------------------- //
