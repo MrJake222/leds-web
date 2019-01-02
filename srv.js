@@ -110,18 +110,6 @@ app.get("/group", function(req, res) {
             })
         })
     }
-
-    /* else {
-        dbGroups.find({}, function(err, docs) {
-            generateMenu(function() {
-                res.render("groups", {
-                    menu: baseMenu,
-                    
-                    groups: docs,
-                })
-            })
-        })
-    } */
 })
 
 app.get("/modifyModule", function(req, res) {
@@ -349,17 +337,62 @@ var modelRegisters = {
     }
 }
 
-// ----------------------------------------------------------------------------- //
+// ---------------------------------------------------------------- 
 var SerialPort = require("serialport")
+const modbusCrc = require("./modbus-crc")
 
-var serial = new SerialPort("/dev/ttyUSB1", {
+var serial = new SerialPort(process.argv[2], {
     autoOpen: true,
-    baudRate: 115200,
+    baudRate: 230400,
     dataBits: 8,
-    parity: "even"
+    parity: "none"
 })
 
-function calcCRC(data) {
+const ModbusParser = require("./parser-modbus")
+const parser = serial.pipe(new ModbusParser())
+
+// ---------------------------------------------------------------- 
+var framebuffer = []
+var blockSerial = false
+var currentTimeout
+
+parser.on("data", function(data) {
+    clearTimeout(currentTimeout)
+
+    data = ModbusParser.parseModbusFrame(data)
+    // console.log("Rx value " + data.registerValue)
+    
+    blockSerial = false
+    handleNextFrame()
+})
+
+function handleNextFrame() {
+    console.log(framebuffer.length, blockSerial)
+
+    if (blockSerial || framebuffer.length == 0)
+        return
+
+    blockSerial = true
+
+    var frame = framebuffer.shift()
+
+    serial.write(frame, function() {
+        currentTimeout = setTimeout(function() {
+            console.log("Timeout ", frame)
+            blockSerial = false
+            handleNextFrame()
+        }, 100)
+    })
+}
+
+function appendToFramebuffer(frame) {
+    framebuffer.push(frame)
+
+    handleNextFrame()
+}
+
+// ----------------------------------------------------------------------------- //
+/* function calcCRC(data) {
 	var CRC = 0xFFFF;
 
 	data.forEach(function(e) {
@@ -376,7 +409,7 @@ function calcCRC(data) {
 	})
 
 	return CRC;
-}
+} */
 
 function to8Bit(int16) {
     var lsb = int16 & 0xFF
@@ -387,11 +420,11 @@ function to8Bit(int16) {
 
 function writeModule(address, data) {
     var frame = [address].concat(data)
-    var crc = calcCRC(frame)
+    /* var crc = calcCRC(frame) */
 
-    frame = frame.concat(to8Bit(crc).reverse())
+    frame = frame.concat(modbusCrc.fastCRC(frame))
 
-    var hex = ""
+    /* var hex = ""
     frame.forEach(function(e) {
         var h = e.toString(16)
         if (h.length < 2)
@@ -400,9 +433,9 @@ function writeModule(address, data) {
         hex += h
     })
 
-    console.log(hex)
+    console.log(hex) */
 
-    serial.write(frame)
+    appendToFramebuffer(frame)
 }
 
 function writeSingleRegister(address, register16, value16) {
