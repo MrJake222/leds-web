@@ -4,9 +4,43 @@ main {
     align-items: flex-start;
 }
 
+.alert {
+    width: 70%;
+    margin: 0 auto;
+    /* margin-bottom: 40px; */
+
+    box-sizing: border-box;
+
+    padding: 4px;
+    border-radius: 24px;
+
+    font-size: 24px;
+    font-style: italic;
+    text-align: center;
+
+    border: 0;
+
+    letter-spacing: 1px;
+}
+
+.good {
+    background: #a5edc2;
+}
+
+.warn {
+    background: #CDD11D;
+}
+
+.address {
+    width: 50%;
+
+    margin-top: 36px;
+}
+
 /* One module */
 form {
-    width: 60%;
+    width: 70%;
+    box-sizing: border-box;
     /* min-width: 460px; */
 
     margin: 0 auto;
@@ -51,6 +85,10 @@ section:last-child {
 }
 
 @media screen and (max-width: 720px) {
+    .alert {
+        width: 70%;
+    }
+    
     form {
         width: 80%;
     }
@@ -93,11 +131,10 @@ input[type=text], input[type=number], select {
     font-size: 1.2em;
 }
 
-input[type=submit] {
+/* input[type=submit] {
     width: 70%;
     padding: 4px;
 
-    /* margin-top: 36px; */
     text-align: center;
 
     font-size: 1.5em;
@@ -108,7 +145,7 @@ input[type=submit] {
 
     cursor: pointer;
     border: 0;
-}
+} */
 
 /* Remove outline from inputs */
 textarea:focus, input:focus, select:focus {

@@ -3,6 +3,49 @@ extends layouts/mainMenu.pug
 block head
     link(rel='stylesheet', href='css/add.css')
 
+    script.
+        function checkAddress(smooth) {
+            var modAddress = $("input[name=modAddress]")[0].value
+            var action = $("input[name=action]")[0].value
+
+            //- console.log(action, modAddress)
+
+            $.post(
+                {
+                    url: "/checkAddress",
+                    dataType: "json"
+                },
+                
+                {
+                    action: action,
+                    modAddress: modAddress
+                },
+                
+                function(data) {
+                    var warn = $("#addressWarn")
+                    var submit = $("input[type=submit]")
+
+                    if (data.error) {
+                        warn.html("Error: "+data.error)
+
+                        if (smooth === false) {
+                            warn.show()
+                            submit.hide()
+                            return
+                        }
+
+                        warn.slideDown()
+                        submit.slideUp()
+                    }
+
+                    else {
+                        warn.slideUp()
+                        submit.slideDown()
+                    }
+                }
+            )
+        }
+
     title= title
 
 block main
@@ -22,10 +65,17 @@ block main
                                 else
                                     option(value=opt.id)= opt.title
                     else
-                        input(type=field.type, name=field.name, value=field.value)
+                        if (field.name == "modAddress")
+                            input(type=field.type, name=field.name, value=field.value, onchange="checkAddress(event)")
+                        else
+                            input(type=field.type, name=field.name, value=field.value)
         
 
         for hid in hidden
             input(type="hidden", name=hid.name, value=hid.value)
         
-        input.submit(type="submit", value=submit)
+        div.alert.warn.hidden(id="addressWarn") Invalid Address
+        input.alert.good.clickable(type="submit", value=submit)
+    
+    script.
+        checkAddress(false)

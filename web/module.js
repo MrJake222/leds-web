@@ -76,6 +76,17 @@ function modifyModule(req, res) {
         })
     }
 
+    db.modules.find({}, function(err, docs) {
+        docs.sort(function(a,b) {
+            return a.modAddress - b.modAddress
+        })
+
+        console.log(docs)
+
+        // TODO
+        // FIll address field with next free address
+    })
+
     if (req.query.action) {
         if (req.query.action == "groupAdd") {
             data.groupID = req.query.groupID

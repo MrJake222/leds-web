@@ -41,6 +41,38 @@ function modifyModule(req, res) {
 }
 
 // --------------------------------------------------------------------------------
+function checkAddress(req, res) {
+    var action = req.body.action.toLowerCase()
+    var modAddress = parseInt(req.body.modAddress)
+
+    if (modAddress == 0) {
+        res.send({error: "Broadcast address"})
+        return
+    }
+
+    if (modAddress < 0 || modAddress > 247) {
+        res.send({error: "Address out of range"})
+        return
+    }
+
+    var maxOccurences = 1
+
+    if (action == "add" || action == "duplicate") {
+        maxOccurences = 0
+    }
+
+    db.modules.find({modAddress: modAddress}, function(err, docs) {
+        if (docs.length > maxOccurences) {
+            res.send({error: "Duplicate address"})
+        }
+
+        else {
+            res.send({})
+        }
+    })
+}
+
+// --------------------------------------------------------------------------------
 function updateValues(req, res) {
     var update = {}
     update[req.body.name] = parseInt(req.body.value)
@@ -62,5 +94,6 @@ function updateValues(req, res) {
 // --------------------------------------------------------------------------------
 module.exports = {
     modifyModule,
-    updateValues
+    updateValues,
+    checkAddress
 }

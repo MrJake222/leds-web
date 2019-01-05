@@ -48,6 +48,11 @@ li {
 li>a {
     line-height: 50px;
 
+    display: block;
+
+    height: 50px;
+    width: 150px;
+
     font-size: 22px;
 }
 
@@ -151,6 +156,14 @@ header {
 .bold {
     /* text-transform: capitalize; */
     font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .delete {
