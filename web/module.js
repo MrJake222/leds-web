@@ -76,38 +76,51 @@ function modifyModule(req, res) {
         })
     }
 
+    /* Finds first free address */
     db.modules.find({}, function(err, docs) {
         docs.sort(function(a,b) {
             return a.modAddress - b.modAddress
         })
 
-        console.log(docs)
+        var addrs = []
+        var addr
 
-        // TODO
-        // FIll address field with next free address
-    })
+        docs.forEach(function(doc) {
+            addrs.push(doc.modAddress)
+        })
 
-    if (req.query.action) {
-        if (req.query.action == "groupAdd") {
-            data.groupID = req.query.groupID
-
-            gen("Add module to group", "Add")
+        for (addr=1; addr<=247; addr++) {
+            if (!addrs.includes(addr))
+                break;
         }
 
-        else {
-            db.modules.find({ _id: req.query.modID }, function(err, docs) {
-                data.modName = docs[0].modName,
-                data.modAddress = docs[0].modAddress,
-                data.modModel = docs[0].modModel,
-                data.groupID = docs[0].groupID   
+        data.modAddress = addr
 
-                gen(req.query.action+" module", req.query.action)
-            })
-        }
-    }
+        if (req.query.action) {
+            if (req.query.action == "groupAdd") {
+                data.groupID = req.query.groupID
 
-    else
-        gen("Add module", "Add")   
+                gen("Add module to group", "Add")
+            }
+
+            else {
+                db.modules.find({ _id: req.query.modID }, function(err, docs) {
+                    data.modName = docs[0].modName,
+                    // data.modAddress = docs[0].modAddress,
+                    data.modModel = docs[0].modModel,
+                    data.groupID = docs[0].groupID   
+
+                    gen(req.query.action+" module", req.query.action)
+                })
+            } // group add else
+        } // if req.query.action
+
+        else
+            gen("Add module", "Add")   
+
+    }) // Free addr end
+
+    
 }
 
 // --------------------------------------------------------------------------------

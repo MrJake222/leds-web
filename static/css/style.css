@@ -118,32 +118,6 @@ header {
     }
 }
 
-.icons-right {
-    text-align: right;
-}
-
-.icons-right * {
-    padding: 0 6px;
-}
-
-.icons-absolute {
-    position: absolute;
-    top: -2px;
-    right: 0;
-}
-
-.icons-absolute * {
-    padding: 0 4px;
-}
-
-/* Sets font and pointers for icons */
-.icon {
-    cursor: pointer;
-
-    font-size: 16px;
-    line-height: 16px;
-}
-
 /* Holds spans of value and it's name */
 .inline {
     display: flex;
@@ -164,19 +138,6 @@ header {
 
 .clickable {
     cursor: pointer;
-}
-
-.delete {
-    font-weight: bold;
-    font-size: 22px;
-}
-
-.add {
-    font-size: 30px;
-    /* font-weight: bold; */
-
-    position: relative;
-    top: 3px;
 }
 
 input[type=range] {

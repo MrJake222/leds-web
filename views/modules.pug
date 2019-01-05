@@ -3,7 +3,26 @@ extends layouts/mainMenu.pug
 block head
     link(rel='stylesheet', href='css/modules.css')
     script(src="js/range.js")
-    script(src="js/ajax.js")
+    //- script(src="js/ajax.js")
+
+    script.
+        function deleteModule(modID) {
+            $.post("/modifyModule", {
+                action: "delete",
+                modID: modID
+            }, function() {
+                location.reload()
+            });
+        }
+
+        function deleteGroup(groupID) {
+            $.post("/modifyGroup", {
+                action: "delete",
+                groupID: groupID
+            }, function() {
+                location.assign("/")
+            });
+        }
 
     title= groupName
 
@@ -21,8 +40,9 @@ block main
         for mod in mods
             section(id=mod._id)
                     header.bold
+                        div.icons-absolute.modAddress= toHex(mod.modAddress)
                         span(title="Address: "+mod.modAddress+"\nModel: "+mod.modModel)= mod.modName
-                        div.icons-absolute
+                        div.icons-absolute.icons-absolute-right
                             a.icon.delete(title="Delete module", onclick="deleteModule('"+mod._id+"')") x
                             a.icon(title="Duplicate module", href="/modifyModule?action=Duplicate&modID="+mod._id) ⎘
                             a.icon(title="Modify module", href="/modifyModule?action=Modify&modID="+mod._id) ✎

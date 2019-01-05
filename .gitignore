@@ -1,4 +1,4 @@
-package-lock.json
+test*.js
 
 # Databases
 *.db

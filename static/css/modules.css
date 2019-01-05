@@ -41,6 +41,59 @@ span {
     padding: 3px;
 }
 
+/* Sets font and pointers for icons */
+.icon {
+    cursor: pointer;
+
+    font-size: 16px;
+    line-height: 16px;
+}
+
+/* Special setting for ASCII 'x' */
+.delete {
+    font-weight: bold;
+    font-size: 22px;
+}
+
+/* Special setting for ASCII '+' */
+.add {
+    font-size: 30px;
+    /* font-weight: bold; */
+
+    position: relative;
+    top: 3px;
+}
+
+/* Group icons placed on the right */
+.icons-right {
+    text-align: right;
+}
+
+.icons-right * {
+    padding: 0 6px;
+}
+
+/* Icons placed inside titlebar of the module */
+.icons-absolute {
+    position: absolute;
+}
+
+.icons-absolute * {
+    padding: 0 4px;
+}
+
+.icons-absolute-right {
+    top: -2px;
+    right: 0;
+}
+
+.modAddress {
+    top: 0px;
+
+    color: #9A9C9D;
+    font-size: 16px;
+}
+
 .row {
     padding: 0 6px;
 }
