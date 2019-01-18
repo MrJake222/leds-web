@@ -2,59 +2,18 @@ extends layouts/mainMenu.pug
 
 block head
     link(rel='stylesheet', href='css/add.css')
-
-    script.
-        function checkAddress(smooth) {
-            var modAddress = $("input[name=modAddress]")[0].value
-            var action = $("input[name=action]")[0].value
-
-            //- console.log(action, modAddress)
-
-            $.post(
-                {
-                    url: "/checkAddress",
-                    dataType: "json"
-                },
-                
-                {
-                    action: action,
-                    modAddress: modAddress
-                },
-                
-                function(data) {
-                    var warn = $("#addressWarn")
-                    var submit = $("input[type=submit]")
-
-                    if (data.error) {
-                        warn.html("Error: "+data.error)
-
-                        if (smooth === false) {
-                            warn.show()
-                            submit.hide()
-                            return
-                        }
-
-                        warn.slideDown()
-                        submit.slideUp()
-                    }
-
-                    else {
-                        warn.slideUp()
-                        submit.slideDown()
-                    }
-                }
-            )
-        }
+    
+    script(src="js/add.js")
 
     title= title
 
 block main
     header= title
 
-    form(method="POST")
+    form(method="POST", onsubmit="onSubmit(event)")
         div.inputs
-            for field in fields
-                section
+            for field in fields                
+                section(class=(small ? "small" : ""))
                     div.name= field.displayName
 
                     if (field.type == "select")
@@ -65,17 +24,28 @@ block main
                                 else
                                     option(value=opt.id)= opt.title
                     else
-                        if (field.name == "modAddress")
-                            input(type=field.type, name=field.name, value=field.value, onchange="checkAddress(event)")
-                        else
+                        //- if (field.name == "modAddress")
+                        input(type=field.type, name=field.name, value=field.value, oninput="check(event, \"" + title + "\")")
+                        //- else
                             input(type=field.type, name=field.name, value=field.value)
         
 
-        for hid in hidden
-            input(type="hidden", name=hid.name, value=hid.value)
+        if hidden
+            for hid in hidden
+                input(type="hidden", name=hid.name, value=hid.value)
         
         div.alert.warn.hidden(id="addressWarn") Invalid Address
         input.alert.good.clickable(type="submit", value=submit)
+
+        if error
+            script.
+                setWarn(true, "#{error}", false)
+
+                setTimeout(function() {
+                    setWarn(false, "#{error}")
+                }, 1000)
     
     script.
-        checkAddress(false)
+        check(null, "#{title}", "username", false)
+        check(null, "#{title}", "login", false)
+        check(null, "#{title}", "password", false)

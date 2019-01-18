@@ -1,0 +1,52 @@
+extends layouts/mainMenu.pug
+
+block head
+    title= username
+    
+    link(rel='stylesheet', href='css/user.css')
+
+    script.
+        function input(name, value, type="text") {
+            var input = document.createElement("input")
+
+            input.name = name
+            input.value = value
+            input.type = type
+
+            return input
+        }
+
+        function editUser(ev, userID, name) {
+            var section = ev.target.parentElement
+            var value = section.children[1]
+
+            var val = ""
+            var type = "password"
+
+            if (name != "Password") {
+                val = value.innerHTML
+                type = "text"
+            }
+            
+            value.innerHTML = ""            
+
+            var form = document.createElement("form")
+            form.method = "POST"
+            form.action = "/modifyUser"
+
+            form.appendChild(input(name.toLowerCase(), val, type))
+            form.appendChild(input("userID", userID, "hidden"))
+
+            value.appendChild(form)
+        }
+
+block main
+    header= username
+
+    div.properties
+        for prop in properties
+            section
+                div.name= prop.name
+                div.value= prop.value
+                div.icon(title="Change "+prop.name, onclick="editUser(event, \""+userID+"\", \""+prop.name+"\")") ✎
+                //- a.icon(title="Change "+prop.name, href="/modifyUser?userID="+userID+"&field="+prop.name+"&value="+prop.value) ✎

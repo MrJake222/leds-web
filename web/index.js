@@ -1,9 +1,9 @@
 menu = require("./menu")
 
 function index(req, res) {
-    menu.generateMenu(function() {
+    menu.generateMenu(req.session.login, function(baseMenu) {
         res.render("index", {
-            menu: menu.baseMenu
+            menu: baseMenu
         })
     })
 }

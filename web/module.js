@@ -22,9 +22,9 @@ function modifyModule(req, res) {
     }
 
     var gen = function(title, submit) {
-        menu.generateMenu(function() {
+        menu.generateMenu(req.session.login, function(baseMenu) {
             res.render("add", {
-                menu: menu.baseMenu, 
+                menu: baseMenu, 
                 
                 title: title,
                 submit: submit,
@@ -69,7 +69,7 @@ function modifyModule(req, res) {
                         name: "groupID",
                         type: "select",
                         value: data.groupID,
-                        options: menu.baseMenu[0].sub
+                        options: baseMenu[0].sub
                     },
                 ]
             })

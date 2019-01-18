@@ -12,7 +12,14 @@ modules = new Datastore({
 })
 
 // --------------------------------------------------------------------------------
+users = new Datastore({
+    filename: "db/users.db",
+    autoload: true
+})
+
+// --------------------------------------------------------------------------------
 module.exports = {
     groups,
-    modules
+    modules,
+    users
 }

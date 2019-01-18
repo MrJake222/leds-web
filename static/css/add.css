@@ -4,33 +4,6 @@ main {
     align-items: flex-start;
 }
 
-.alert {
-    width: 70%;
-    margin: 0 auto;
-    /* margin-bottom: 40px; */
-
-    box-sizing: border-box;
-
-    padding: 4px;
-    border-radius: 24px;
-
-    font-size: 24px;
-    font-style: italic;
-    text-align: center;
-
-    border: 0;
-
-    letter-spacing: 1px;
-}
-
-.good {
-    background: #a5edc2;
-}
-
-.warn {
-    background: #CDD11D;
-}
-
 .address {
     width: 50%;
 
@@ -65,12 +38,12 @@ section {
 }
 
 section:last-child {
-    margin-bottom: 12px;
+    margin-bottom: 36px;
 }
 
 @media screen and (min-width: 720px) {
     .name {
-        width: 100px;        
+        width: 120px;        
         padding: 6px 12px;
     
         font-size: 1.3em;
@@ -104,6 +77,24 @@ section:last-child {
     }
 }
 
+
+/* Forcing vertical text align with js */
+section.small {
+    flex-direction: column;
+
+    margin-bottom: 12px;
+}
+
+section.small:last-child {
+    margin-bottom: 36px;
+}
+
+section.small .name {
+    text-align: center;
+}
+
+/* -------------- */
+
 .inputs {
     width: 100%;
 }
@@ -116,7 +107,7 @@ section:last-child {
 }
 
 /* Input fields */
-input[type=text], input[type=number], select {
+input[type=text], input[type=number], input[type="password"], select {
     box-sizing: border-box;
 
     width: 100%;

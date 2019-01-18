@@ -1,35 +1,53 @@
-var baseMenu = [
+var baseMenu
+
+var mainMenu = [
     {
         title: "Groups",
         sub: []
     },
 
     {
-        title: "Admin",
-        sub: [
-            {
-                title: "Add module",
-                href: "/modifyModule"
-            },
-
-            {
-                title: "Add group",
-                href: "/modifyGroup"
-            },
-        ]
+        title: "username",
+        right: true,
+        sub: []
     }
 ]
 
+var logoutMenu = {
+    title: "Logout",
+    href: "/logout"
+}
+
+var adminMenu = {
+    title: "Admin",
+    sub: [
+        {
+            title: "Add module",
+            href: "/modifyModule"
+        },
+
+        {
+            title: "Add group",
+            href: "/modifyGroup"
+        },
+
+        {
+            title: "Users",
+            href: "/users"
+        }
+    ]
+}
+
 // --------------------------------------------------------------------------------
-function generateMenu(callback) {
+function generateMenu(login, cb) {
     db.groups.find({}, function(err, docs) {
         if (err)
             throw err
 
-        baseMenu[0].sub = []
+        mainMenu[0].sub = []
 
         docs.forEach(function(e) {
-            baseMenu[0].sub.push({
+            mainMenu[0].sub.push({
                 title: e.groupName,
                 href: "/group?groupID=" + e._id,
 
@@ -38,12 +56,31 @@ function generateMenu(callback) {
             })
         })
         
-        callback()
+        // baseMenu = mainMenu.slice()
+        
+        // if (login) {
+        db.users.find({login: login}, function(err, docs) {
+
+            mainMenu[1].title = docs[0].username
+
+            if (docs[0].admin)
+                mainMenu[1].sub = [adminMenu]                
+
+            mainMenu[1].sub.push(logoutMenu)
+
+            cb(mainMenu, docs[0])
+        })
+        // }
+
+        // else {
+        //     baseMenu.pop()
+
+        //     cb(baseMenu)
+        // }
     })
 }
 
 // --------------------------------------------------------------------------------
 module.exports = {
-    baseMenu,
     generateMenu
 }

@@ -8,9 +8,9 @@ function modifyGroup(req, res) {
     }
 
     var gen = function(title) {
-        menu.generateMenu(function() {
+        menu.generateMenu(req.session.login, function(baseMenu) {
             res.render("add", {
-                menu: menu.baseMenu, 
+                menu: baseMenu, 
 
                 hidden: [
                     {
@@ -65,9 +65,9 @@ function group(req, res) {
                 })
 
                 // Generate menu
-                menu.generateMenu(function() {
+                menu.generateMenu(req.session.login, function(baseMenu) {
                     res.render("modules", {
-                        menu: menu.baseMenu,
+                        menu: baseMenu,
                         
                         groupID: docsGroup[0]._id,
                         groupName: docsGroup[0].groupName,

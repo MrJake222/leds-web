@@ -3,7 +3,7 @@ const fastCRC = require("./fastCRC")
 
 var serial = new SerialPort(process.argv[2], {
     autoOpen: true,
-    baudRate: 230400,
+    baudRate: 57600,
     dataBits: 8,
     parity: "none"
 })

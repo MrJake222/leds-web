@@ -1,13 +1,28 @@
 extends main.pug
 
-mixin generateMenu(tab)
-    ul
+mixin generateMenu(tab, depth, right)
+    - var shift = ""
+    - 
+    - if (depth > 1) {
+    -   shift += "bottom: 52px; "
+    -   
+    -   if (right) {
+    -       shift += "right: "
+    -   }
+    -   else {
+    -       shift += "left: "
+    -   }
+    -
+    -   shift += 150 * (depth-1) + "px;"
+    - }
+
+    ul(style=shift)
         for entry in tab
-            li(onmouseenter="submenuHover(event)", onmouseleave="submenuHover(event)", style=(entry.title == "Admin" ? "margin-left: auto" : ""))
+            li(onmouseenter="submenuHover(event)", onmouseleave="submenuHover(event)", style=(entry.right ? "margin-left: auto;" : ""))
                 a(href=entry.href)= entry.title
 
                 if entry.sub && entry.sub.length > 0
-                    +generateMenu(entry.sub)
+                    +generateMenu(entry.sub, depth+1, right | entry.right)
 
 block nav
     script.
@@ -18,4 +33,6 @@ block nav
             el.slideToggle(ev.type == "mouseenter" ? 400 : 200)
         }
 
-    +generateMenu(menu)
+    //- - var depth = 0
+
+    +generateMenu(menu, 0, false)
