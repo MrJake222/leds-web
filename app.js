@@ -75,5 +75,5 @@ var apiModule = require("./api/module")
 
 app.get("/modifyModule",  webModule.modifyModule)
 app.post("/modifyModule", apiModule.modifyModule)
-app.post("/updateValues", apiModule.updateValues)
 app.post("/checkAddress", apiModule.checkAddress)
+app.post("/updateLeds", apiModule.updateLeds)

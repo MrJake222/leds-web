@@ -2,7 +2,8 @@ extends layouts/mainMenu.pug
 
 block head
     link(rel='stylesheet', href='css/modules.css')
-    script(src="js/range.js")
+    script(src="js/modules.js")
+    //- script(src="js/range.js")
     //- script(src="js/ajax.js")
 
     script.
@@ -38,7 +39,7 @@ block main
 
     div.modules
         for mod in mods
-            section(id=mod._id)
+            section
                     header.bold
                         div.icons-absolute.modAddress= toHex(mod.modAddress)
                         span(title="Address: "+mod.modAddress+"\nModel: "+mod.modModel)= mod.modName
@@ -47,22 +48,13 @@ block main
                             a.icon(title="Duplicate module", href="/modifyModule?action=Duplicate&modID="+mod._id) ⎘
                             a.icon(title="Modify module", href="/modifyModule?action=Modify&modID="+mod._id) ✎
 
-                    div.rows
-                        for prop in properties[mod.modModel].inputs
-                            div.row
-                                div.rangeName.inline(style="color: "+prop.color)
-                                    span.bold= prop.displayName
+                    div.canvasContainer.canvasContainerHeigth(id=mod._id)
+                        canvas.hue(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.hue)
 
-                                    //- - value = Math.round(mod[prop.name] / 255 * 100)
-                                    span= mod[prop.name]
-                                
-                                //- input(type=prop.type, name=prop.name, min=0, max=255, step=1, oninput="valChange(event, '" + mod._id + "', '" + prop.name + "')")
-                                input(id=mod._id+"-"+prop.name, type=prop.type, name=prop.name, min=0, max=255, step=1, oninput="updateLeds(event, '"+ mod._id +"', '"+ mod.modModel +"', '"+ prop.name +"')" onchange="updateLeds(event, '"+ mod._id +"', '"+ mod.modModel +"', '"+ prop.name +"')")
+                        div.side
+                            canvas.saturation(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.saturation)
+                            canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.lightness)
 
-                            script.
-                                addModuleInput("#{mod._id}", "#{prop.name}", #{mod[prop.name]})                        
-                        script.
-                            updateModuleColor("#{mod._id}", "#{mod.modModel}")
 
-    //- script.
-    //-     updateRanges()
+    script.
+        initCanvas()

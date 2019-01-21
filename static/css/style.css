@@ -200,13 +200,13 @@ input[type=range]::-webkit-slider-runnable-track {
 input[type=range]::-webkit-slider-thumb {
 	box-shadow: 0px 0px 0px rgba(182, 184, 186, 0), 0px 0px 0px rgba(195, 197, 198, 0);
 	border: 0.5px solid #b6b8ba;
-	height: 16px;
-	width: 16px;
+	height: 18px;
+	width: 18px;
 	border-radius: 50px;
 	background: #ffffff;
-	cursor: pointer;
-	-webkit-appearance: none;
-	margin-top: -4.4px;
+    cursor: pointer;
+    -webkit-appearance: none;
+	margin-top: -5.4px;
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
@@ -231,6 +231,13 @@ input[type=range]::-moz-range-thumb {
 	border-radius: 50px;
 	background: #ffffff;
 	cursor: pointer;
+}
+
+@media screen and (max-width: 720px) {
+    input[type=range]::-moz-range-thumb {
+        height: 20px;
+        width: 20px;
+    }
 }
 
 input[type=range]::-ms-track {
@@ -259,8 +266,8 @@ input[type=range]::-ms-fill-upper {
 input[type=range]::-ms-thumb {
 	box-shadow: 0px 0px 0px rgba(182, 184, 186, 0), 0px 0px 0px rgba(195, 197, 198, 0);
 	border: 0.5px solid #b6b8ba;
-	height: 16px;
-	width: 16px;
+	height: 18px;
+	width: 18px;
 	border-radius: 50px;
 	background: #ffffff;
 	cursor: pointer;
@@ -273,4 +280,8 @@ input[type=range]:focus::-ms-fill-lower {
 
 input[type=range]:focus::-ms-fill-upper {
 	background: rgba(182, 184, 186, 0.78);
+}
+
+input[type=range]::-moz-focus-outer {
+    border: 0;
 }

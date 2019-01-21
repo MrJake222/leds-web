@@ -51,6 +51,11 @@ function parseModbusFrame(frame) {
 			ret.registerValue = (frame[4] << 8) || frame[5]
 			break
 
+		case 0x10:
+			// ret.modRegister = (frame[2] << 8) || frame[3]
+			// ret.registerValue = (frame[4] << 8) || frame[5]
+			break
+
 		default:
 			ret.error = "Unknown function code"
 			break
