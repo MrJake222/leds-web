@@ -40,15 +40,15 @@ class ModbusParser extends Transform {
 function parseModbusFrame(frame) {
 	//console.log(frame)
 	
-	var ret = {
+	/* var ret = {
 		modAddress: frame[0],
 		functionCode: frame[1],
-	}
+	} */
 
 	switch(ret.functionCode) {
 		case 0x06:
-			ret.modRegister = (frame[2] << 8) || frame[3]
-			ret.registerValue = (frame[4] << 8) || frame[5]
+			/* ret.modRegister = (frame[2] << 8) || frame[3]
+			ret.registerValue = (frame[4] << 8) || frame[5] */
 			break
 
 		case 0x10:
@@ -61,7 +61,7 @@ function parseModbusFrame(frame) {
 			break
 	}
 
-	return ret
+	// return ret
 }
 
 // --------------------------------------------------------------------------------

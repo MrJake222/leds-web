@@ -3,6 +3,7 @@ extends layouts/mainMenu.pug
 block head
     link(rel='stylesheet', href='css/modules.css')
     script(src="js/modules.js")
+    script(src="js/sweep.js")
     //- script(src="js/range.js")
     //- script(src="js/ajax.js")
 
@@ -53,7 +54,7 @@ block main
 
                         div.side
                             canvas.saturation(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.saturation)
-                            canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.lightness)
+                            canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", onclick="clickLightness(event)", data-value=mod.lightness, data-lastlightness=mod.lastlightness)
 
 
     script.

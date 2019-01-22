@@ -117,18 +117,22 @@ function hslToRgb(h, s, l) {
 }
 
 function gamma(val) {
-    return Math.round( (req.body.value*req.body.value) / 255 )
+    return Math.round( (val*val) / 255 )
 }
 
 function updateLeds(req, res) {
-    console.log(req.body.databaseUpdate)
-
     var updateSet = {}
 
-    updateSet[req.body.inputName] = parseInt(req.body.inputValue)
+    if (req.body.inputValue != undefined)
+        updateSet[req.body.inputName] = parseInt(req.body.inputValue)
 
     if (req.body.databaseUpdate == "true") {
         db.modules.update({ _id: req.body.modID }, { $set: updateSet }, {})
+    }
+
+    if (req.body.inputName == "lastlightness" && req.body.databaseUpdate == "true") {
+        res.send("")
+        return
     }
 
     db.modules.find({ _id: req.body.modID }, function(err, docs) {
@@ -139,9 +143,23 @@ function updateLeds(req, res) {
         // var gamma = Math.round( (req.body.value*req.body.value) / 255 )
 
         var mod = docs[0]
-        mod[req.body.inputName] = updateSet[req.body.inputName]
+        
+        if (req.body.inputName == "lastlightness")
+            mod["lightness"] = mod["lastlightness"]
+        else
+            mod[req.body.inputName] = updateSet[req.body.inputName]
 
         var rgb = hslToRgb(mod.hue/360, mod.saturation/100, mod.lightness/100)
+
+        if (req.body.inputName == "lastlightness") {
+            for (let i=0; i<3; i++)
+                rgb[i] |= 0x0100
+        }
+
+        /* for (let i=0; i<3; i++)
+            rgb[i] = gamma(rgb[i]) */
+
+        // console.log(rgb)
 
         modbus.writeMultipleRegisters(docs[0].modAddress, 0x0000, rgb)
     })
@@ -149,9 +167,28 @@ function updateLeds(req, res) {
     res.send("")
 }
 
+function dim(req, res) {
+    db.modules.find({ _id: req.body.modID }, function(err, docs) {
+        if (err)
+            throw err
+
+        var time = parseInt(req.body.time)
+
+        var value = (time & 0x0FFF)
+
+        if (req.body.undim == "true")
+            value |= 0xF000
+
+        // console.log(value)
+
+        modbus.writeSingleRegister(docs[0].modAddress, 0x0005, value, time+100)
+    })
+}
+
 // --------------------------------------------------------------------------------
 module.exports = {
     modifyModule,
     checkAddress,
-    updateLeds
+    updateLeds,
+    dim
 }

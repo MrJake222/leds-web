@@ -22,7 +22,7 @@ parser.on("data", function(data) {
 
     clearTimeout(currentTimeout)
 
-    data = ModbusParser.parseModbusFrame(data)
+    // data = ModbusParser.parseModbusFrame(data)
     // console.log("Rx value " + data.registerValue)
     
     blockSerial = false
@@ -38,17 +38,19 @@ function handleNextFrame(append) {
 
     blockSerial = true
 
-    var frame = framebuffer.shift()
+    var frameData = framebuffer.shift()
 
-    serial.write(frame, function() {
-        if (frame[0]) {
+    // console.log(frameData)
+
+    serial.write(frameData.frame, function() {
+        if (frameData.frame[0]) {
             currentTimeout = setTimeout(function() {
                 currentTimeout = null
-                console.log("Timeout ", frame)
+                console.log("Timeout ", frameData.frame)
 
                 blockSerial = false
                 handleNextFrame("timeout")
-            }, 100)
+            }, frameData.timeout)
         }
     })
 }

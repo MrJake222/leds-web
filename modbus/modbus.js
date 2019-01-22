@@ -9,23 +9,28 @@ function to8Bit(int16) {
 }
 
 // --------------------------------------------------------------------------------
-function writeModule(address, data) {
+function writeModule(address, data, timeout) {
     var frame = [address].concat(data)
 
     frame = frame.concat(fastCRC.fastCRC(frame))
-    framebuffer.append(frame)
+    framebuffer.append({
+        frame: frame,
+        timeout: timeout
+    })
+
+    // console.log(frame)
 }
 
 // --------------------------------------------------------------------------------
-function writeSingleRegister(address, register16, value16) {
+function writeSingleRegister(address, register16, value16, timeout=200) {
     const func_code = 0x06
 
-    writeModule(address, [func_code].concat(to8Bit(register16)).concat(to8Bit(value16)))
+    writeModule(address, [func_code].concat(to8Bit(register16)).concat(to8Bit(value16)), timeout)
 }
 
 // --------------------------------------------------------------------------------
 // modbus.writeMultipleRegisters(docs[0].modAddress, 0x0000, rgb)
-function writeMultipleRegisters(address, startingRegister, values) {
+function writeMultipleRegisters(address, startingRegister, values, timeout=200) {
     const func_code = 0x10
 
     var data = [func_code]
@@ -38,7 +43,7 @@ function writeMultipleRegisters(address, startingRegister, values) {
         data = data.concat(to8Bit(val))
     })
 
-    writeModule(address, data)
+    writeModule(address, data, timeout)
 }
 
 // --------------------------------------------------------------------------------

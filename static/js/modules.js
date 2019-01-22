@@ -134,18 +134,16 @@ function updateHeader(mod) {
     header.style.borderColor = `hsl(${values.hue}, ${values.saturation}%, ${values.lightness}%)`
 }
 
-function updateLeds(mod, inputName, eventType) {
+function updateLeds(mod, inputName, databaseUpdate) {
     updateHeader(mod)
 
     // ----------------------------------------------- //
-    var data = {
+    $.post("/updateLeds", {
         modID: mod.id,
-        databaseUpdate: eventType == "mouseup" || eventType == "touchend",
+        databaseUpdate: databaseUpdate,
         inputName: inputName,
         inputValue: mod.values[inputName]
-    }
-
-    $.post("/updateLeds", data)
+    })
 }
 
 // --------------------------------------------------------------------------------
@@ -217,6 +215,11 @@ function initCanvas() {
             var maxWidth = getComputedStyle(canvasContainer).width.slice(0, -2)
             canvasData[canvasContainer.id].canvases[cls] = genData(canvas, heights[idx], maxWidth, cls)
             canvasData[canvasContainer.id].values[cls] = parseInt(canvas.getAttribute("data-value"))
+
+            if (cls == "lightness") {
+                canvasData[canvasContainer.id].values["lastlightness"] = parseInt(canvas.getAttribute("data-lastlightness"))
+                // $(canvas).taphold(dblClick)
+            }
         })
 
         redraw(canvasData[canvasContainer.id])
@@ -279,19 +282,31 @@ function clamp(min, i, max) {
     return i
 }
 
+function getMod(canvas) {
+    do {
+        canvas = canvas.parentElement
+    } while (!canvas.classList.contains("canvasContainer"))
+
+    return canvasData[canvas.id]
+}
+
 function mouseMove(ev, first=false) {
+    console.log(ev.type)
+
     var cls = currentCanvas.classList[0]
     var mouse = getMousePos(ev, currentCanvas)
 
     // console.log(ev, currentCanvas)
 
-    var canvasContainer = currentCanvas
+    /* var canvasContainer = currentCanvas
 
     do {
         canvasContainer = canvasContainer.parentElement
     } while (!canvasContainer.classList.contains("canvasContainer"))
 
-    var mod = canvasData[canvasContainer.id]
+    var mod = canvasData[canvasContainer.id] */
+
+    var mod = getMod(currentCanvas)
     var data = mod.canvases[cls]
 
     if (first) {
@@ -331,12 +346,14 @@ function mouseMove(ev, first=false) {
     redraw(mod, cls)
     
     if (ev.type != "mousedown" && ev.type != "touchstart")
-        updateLeds(mod, cls, ev.type)
+        updateLeds(mod, cls, (ev.type == "mouseup" || ev.type == "touchend"))
 
     ev.preventDefault()
 }
 
 function mouseDown(ev) {
+    console.log(ev.type)
+
     currentCanvas = ev.target
 
     window.onmousemove = mouseMove
@@ -348,6 +365,8 @@ function mouseDown(ev) {
 }
 
 function mouseUp(ev) {
+    console.log(ev.type)
+
     window.onmousemove = null
     window.onmouseup = null
 
@@ -357,7 +376,12 @@ function mouseUp(ev) {
 }
 
 function touchStart(ev) {
+    console.log(ev.type)
+
     currentCanvas = ev.target
+
+    if (ev.target.classList[0] == "lightness")
+        clickLightness(ev)
 
     ev.target.ontouchmove = mouseMove
 
@@ -365,9 +389,83 @@ function touchStart(ev) {
 }
 
 function touchEnd(ev) {
+    console.log(ev.type)
+
     ev.target.ontouchmove = null
 
     // console.log(ev)
 
-    mouseMove(ev)
+    console.log(firstClick, clickTimer)
+    if (clickTimer)
+        mouseMove(ev)
+}
+
+// --------------------------------------------------------------------------------
+var firstClick = true
+var clickTimer
+
+function clickLightness(ev) {
+    // console.log("click")
+
+    if (firstClick) {
+        firstClick = false
+
+        clickTimer = setTimeout(function() {
+            firstClick = true
+        }, 800)
+    }
+
+    else {
+        clearTimeout(clickTimer)
+        firstClick = true
+        clickTimer = null
+
+        dblClick(ev)
+    }
+
+    ev.preventDefault()
+}
+
+function dblClick(ev) {
+    console.log(ev.type)
+
+    var mod = getMod(ev.target)
+    var cls = ev.target.classList[0]
+
+    var undim = (mod.values[cls] == 0)
+
+    console.log(undim)
+
+    if (undim) {
+        mod.values[cls] = mod.values["lastlightness"]
+        mod.values["lastlightness"] = undefined
+
+        updateLeds(mod, "lastlightness", false)
+    }
+
+    $.post("/dim", {
+        modID: mod.id,
+        time: 1000,
+        undim: undim
+    })
+
+    var currentVal = mod.values[cls]
+
+    sweep(1000, undim, function(val) {
+        mod.values[cls] = val * currentVal
+
+        // console.log(mod.values[cls])
+        updateHeader(mod)
+        redraw(mod, cls)
+        // updateLeds(mod, cls, false)
+    }, function() {
+        console.log(mod.values)
+        
+        if (!undim) {
+            mod.values["lastlightness"] = currentVal
+            updateLeds(mod, "lastlightness", true)
+        }
+
+        updateLeds(mod, cls, true)
+    })
 }
