@@ -91,10 +91,34 @@ function user(req, res) {
 }
 
 // --------------------------------------------------------------------------------
+// Generates add user menu
 function addUser(req, res) {
     var gen = function(title) {
-        menu.generateMenu(req.session.login, function(baseMenu) {
-            var fields = [
+        res.render("add", {
+            menu: [
+                {
+                    title: "Log in",
+                    right: true,
+                    href: "/login",
+                }
+            ],
+            
+            title: title + " user",
+            submit: title,
+
+            hidden: [
+                {
+                    name: "action",
+                    value: title
+                },
+
+                {
+                    name: "userID",
+                    value: req.query.userID
+                }
+            ],
+
+            fields: [
                 {
                     displayName: "Username",
                     name: "username",
@@ -119,70 +143,6 @@ function addUser(req, res) {
                     type: "password"
                 },
             ]
-
-            // if (req.query.field) {
-            //     for (let i=0; i<fields.length; i++) {
-            //         if (fields[i].displayName == req.query.field) {
-                        
-            //             if (req.query.field != "Password")
-            //                 fields[i].value = req.query.value
-
-            //             fields = [ fields[i] ]
-            //             break
-            //         }
-            //     }
-            // }
-
-            res.render("add", {
-                menu: [
-                    {
-                        title: "Log in",
-                        right: true,
-                        href: "/login",
-                    }
-                ],
-                
-                title: title + " user",
-                submit: title,
-    
-                hidden: [
-                    {
-                        name: "action",
-                        value: title
-                    },
-
-                    {
-                        name: "userID",
-                        value: req.query.userID
-                    }
-                ],
-
-                fields: [
-                    {
-                        displayName: "Username",
-                        name: "username",
-                        type: "text",
-                    },
-
-                    {
-                        displayName: "Login",
-                        name: "login",
-                        type: "text",
-                    },
-    
-                    {
-                        displayName: "Password",
-                        name: "password",
-                        type: "password"
-                    },
-    
-                    {
-                        displayName: "Confirm",
-                        name: "password",
-                        type: "password"
-                    },
-                ]
-            })
         })
     }
 

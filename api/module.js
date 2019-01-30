@@ -14,8 +14,8 @@ function modifyModule(req, res) {
         case "add":
         case "duplicate":
             // Generate input fields
-            modules.models[req.body.modModel].inputs.forEach(function(e) {
-                data[e.name] = 0
+            modules.models[req.body.modModel].inputs.forEach(function(input) {
+                data[input] = 0
             })
 
             db.modules.insert(data, function(err, docs) {

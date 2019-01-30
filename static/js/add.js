@@ -1,7 +1,7 @@
 var warnLevel = {}
 
 function setWarn(set, text, smooth=true) {
-    console.log(set, text, warnLevel)
+    // console.log(set, text, warnLevel)
 
     var warn = $("#addressWarn")
     var submit = $("input[type=submit]")
@@ -35,7 +35,7 @@ function setWarn(set, text, smooth=true) {
         }
     }
 
-    console.log("warnLevel: ", warnLevel)
+    // console.log("warnLevel: ", warnLevel)
 }
 
 function checkAddress(smooth=true) {

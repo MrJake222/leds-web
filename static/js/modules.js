@@ -149,7 +149,7 @@ function updateLeds(mod, inputName, databaseUpdate) {
 // --------------------------------------------------------------------------------
 function initCanvas() {
     var genData = function(canvas, height, parentWidth, prop) {     
-        console.log(parentWidth, height)
+        // console.log(parentWidth, height)
         
         // if (parentWidth < 420) {
             var scale = parentWidth / 500
@@ -291,7 +291,7 @@ function getMod(canvas) {
 }
 
 function mouseMove(ev, first=false) {
-    console.log(ev.type)
+    // console.log(ev.type)
 
     var cls = currentCanvas.classList[0]
     var mouse = getMousePos(ev, currentCanvas)
@@ -352,7 +352,7 @@ function mouseMove(ev, first=false) {
 }
 
 function mouseDown(ev) {
-    console.log(ev.type)
+    // console.log(ev.type)
 
     currentCanvas = ev.target
 
@@ -365,7 +365,7 @@ function mouseDown(ev) {
 }
 
 function mouseUp(ev) {
-    console.log(ev.type)
+    // console.log(ev.type)
 
     window.onmousemove = null
     window.onmouseup = null
@@ -376,7 +376,7 @@ function mouseUp(ev) {
 }
 
 function touchStart(ev) {
-    console.log(ev.type)
+    // console.log(ev.type)
 
     currentCanvas = ev.target
 
@@ -389,13 +389,13 @@ function touchStart(ev) {
 }
 
 function touchEnd(ev) {
-    console.log(ev.type)
+    // console.log(ev.type)
 
     ev.target.ontouchmove = null
 
     // console.log(ev)
 
-    console.log(firstClick, clickTimer)
+    // console.log(firstClick, clickTimer)
     if (clickTimer)
         mouseMove(ev)
 }
@@ -427,14 +427,14 @@ function clickLightness(ev) {
 }
 
 function dblClick(ev) {
-    console.log(ev.type)
+    // console.log(ev.type)
 
     var mod = getMod(ev.target)
     var cls = ev.target.classList[0]
 
     var undim = (mod.values[cls] == 0)
 
-    console.log(undim)
+    // console.log(undim)
 
     if (undim) {
         mod.values[cls] = mod.values["lastlightness"]
@@ -459,7 +459,7 @@ function dblClick(ev) {
         redraw(mod, cls)
         // updateLeds(mod, cls, false)
     }, function() {
-        console.log(mod.values)
+        // console.log(mod.values)
         
         if (!undim) {
             mod.values["lastlightness"] = currentVal

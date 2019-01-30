@@ -1,7 +1,10 @@
 const SerialPort = require("serialport")
 const fastCRC = require("./fastCRC")
 
-var serial = new SerialPort(process.argv[2], {
+// var portPath = process.argv[2]
+var portPath = "/dev/ttyS0"
+
+var serial = new SerialPort(portPath, {
     autoOpen: true,
     baudRate: 57600,
     dataBits: 8,
