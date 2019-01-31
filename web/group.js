@@ -1,6 +1,6 @@
 menu = require("./menu")
 db   = require("../database/db")
-modules = require("../modules")
+// modules = require("../modules")
 
 function modifyGroup(req, res) {
     var data = {
@@ -58,22 +58,27 @@ function group(req, res) {
             // console.log(docsGroup)
 
             // Get list of modules in this group
-            db.modules.find({ groupID: req.query.groupID }, function(err, docs) {
+            db.modules.find({ groupID: req.query.groupID }, function(err, docsMods) {
                 // console.log(docs)
-                docs.sort(function(a, b) {
+                docsMods.sort(function(a, b) {
                     return a.modAddress - b.modAddress
                 })
 
-                // Generate menu
-                menu.generateMenu(req.session.login, function(baseMenu) {
-                    res.render("modules", {
-                        menu: baseMenu,
-                        
-                        groupID: docsGroup[0]._id,
-                        groupName: docsGroup[0].groupName,
+                db.preset.find({ login: req.session.login }, function(err, docsPresets) {
+                    console.log(docsPresets)
 
-                        mods: docs,
-                        properties: modules.models,
+                    // Generate menu
+                    menu.generateMenu(req.session.login, function(baseMenu) {
+                        res.render("modules", {
+                            menu: baseMenu,
+                            
+                            groupID: docsGroup[0]._id,
+                            groupName: docsGroup[0].groupName,
+
+                            mods: docsMods,
+                            presets: docsPresets
+                            // properties: modules.models,
+                        })
                     })
                 })
             })

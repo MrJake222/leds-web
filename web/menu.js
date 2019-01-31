@@ -62,6 +62,7 @@ function generateMenu(login, cb) {
         db.users.find({login: login}, function(err, docs) {
 
             mainMenu[1].title = docs[0].username
+            mainMenu[1].sub = []
 
             if (docs[0].admin)
                 mainMenu[1].sub = [adminMenu]                

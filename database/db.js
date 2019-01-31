@@ -18,8 +18,15 @@ users = new Datastore({
 })
 
 // --------------------------------------------------------------------------------
+preset = new Datastore({
+    filename: "db/preset.db",
+    autoload: true
+})
+
+// --------------------------------------------------------------------------------
 module.exports = {
     groups,
     modules,
-    users
+    users,
+    preset
 }

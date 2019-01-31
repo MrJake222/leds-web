@@ -36,8 +36,9 @@ app.listen(PORT, function() {
 })
 
 // --------------------------------------------------------------------------------
-webUsers = require("./web/users")
-apiUsers = require("./api/users")
+webUsers  = require("./web/users")
+apiUsers  = require("./api/users")
+apiPreset = require("./api/preset")
 
 // Display login page
 app.use(webUsers.loginStatusCheck)
@@ -55,6 +56,8 @@ app.post("/login", apiUsers.login)
 app.post("/addUser", apiUsers.addUser)
 app.post("/modifyUser", apiUsers.modifyUser)
 app.post("/checkLogin", apiUsers.checkLogin)
+
+app.post("/modifyPreset", apiPreset.modifyPreset)
 
 // --------------------------------------------------------------------------------
 var index = require("./web/index")

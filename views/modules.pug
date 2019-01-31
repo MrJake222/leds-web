@@ -2,8 +2,9 @@ extends layouts/mainMenu.pug
 
 block head
     link(rel='stylesheet', href='css/modules.css')
-    script(src="js/modules.js")
+    script(src="js/canvas.js")
     script(src="js/sweep.js")
+    //- script(src="js/preset.js")
     //- script(src="js/range.js")
     //- script(src="js/ajax.js")
 
@@ -23,39 +24,71 @@ block head
                 groupID: groupID
             }, function() {
                 location.assign("/")
-            });
+            })
+        }
+
+        function addPreset(modID, login) {
+            //- console.log("preset for " + modID)
+            var data = {
+                action: "Add",
+                modID: modID,
+                login: login,
+                name: prompt("Preset name")
+            }
+
+            if (!data.name)
+                return
+
+            $.post("/modifyPreset", data, function() {
+                location.reload()
+            })
+        }
+
+        function deletePreset(presetID) {
+            $.post("/modifyPreset", {
+                action: "Delete",
+                presetID: presetID
+            }, function() {
+                location.reload()
+            })
         }
 
     title= groupName
 
 block main
-    div.icons-right
-        a.icon.delete(title="Delete group", onclick="deleteGroup('"+groupID+"')") x
-        a.icon.add(title="Add module to this group", href="/modifyModule?action=groupAdd&groupID="+groupID) +
-        a.icon(title="Duplicate group", href="/modifyGroup?action=Duplicate&groupID="+groupID) ⎘
-        a.icon(title="Modify group", href="/modifyGroup?action=Modify&groupID="+groupID) ✎
+    .group
+        .icons-right
+            a.icon.delete(title="Delete group", onclick="deleteGroup('"+groupID+"')") x
+            a.icon.add(title="Add module to this group", href="/modifyModule?action=groupAdd&groupID="+groupID) +
+            a.icon(title="Duplicate group", href="/modifyGroup?action=Duplicate&groupID="+groupID) ⎘
+            a.icon(title="Modify group", href="/modifyGroup?action=Modify&groupID="+groupID) ✎
 
-    header= groupName
-        //- span= groupName
+        header= groupName
+            //- span= groupName
 
-    div.modules
-        for mod in mods
-            section
-                    header.bold
-                        div.icons-absolute.modAddress= toHex(mod.modAddress)
-                        span(title="Address: "+mod.modAddress+"\nModel: "+mod.modModel)= mod.modName
-                        div.icons-absolute.icons-absolute-right
-                            a.icon.delete(title="Delete module", onclick="deleteModule('"+mod._id+"')") x
-                            a.icon(title="Duplicate module", href="/modifyModule?action=Duplicate&modID="+mod._id) ⎘
-                            a.icon(title="Modify module", href="/modifyModule?action=Modify&modID="+mod._id) ✎
+        .modules
+            for mod in mods
+                section
+                        header.bold
+                            div.icons-absolute.modAddress= toHex(mod.modAddress)
+                            span(title="Address: "+mod.modAddress+"\nModel: "+mod.modModel)= mod.modName
+                            div.icons-absolute.icons-absolute-right
+                                a.icon.delete(title="Delete module", onclick="deleteModule('"+mod._id+"')") x
+                                a.icon(title="Duplicate module", href="/modifyModule?action=Duplicate&modID="+mod._id) ⎘
+                                a.icon(title="Modify module", href="/modifyModule?action=Modify&modID="+mod._id) ✎
+                                a.icon(title="Save preset", onclick="addPreset('"+mod._id+"')") 🖫
 
-                    div.canvasContainer.canvasContainerHeigth(id=mod._id)
-                        canvas.hue(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.hue)
+                        div.canvasContainer.canvasContainerHeigth(id=mod._id)
+                            canvas.hue(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.hue)
 
-                        div.side
-                            canvas.saturation(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.saturation)
-                            canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", onclick="clickLightness(event)", data-value=mod.lightness, data-lastlightness=mod.lastlightness)
-
+                            div.side
+                                canvas.saturation(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.saturation)
+                                canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", onclick="clickLightness(event)", data-value=mod.lightness, data-lastlightness=mod.lastlightness)
+    .presets
+        for preset in presets
+            div(style="background-color: hsl("+preset.hue+", "+preset.saturation+"%, "+preset.lightness+"%);")= preset.name
+                div.icons-absolute.icons-absolute-right
+                    a.icon.delete(title="Delete group", onclick="deletePreset('"+preset._id+"')") x
 
     script.
         initCanvas()

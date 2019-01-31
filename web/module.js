@@ -89,12 +89,14 @@ function modifyModule(req, res) {
             addrs.push(doc.modAddress)
         })
 
-        for (addr=1; addr<=247; addr++) {
-            if (!addrs.includes(addr))
-                break;
-        }
+        if (req.query.action != "Modify") {
+            for (addr=1; addr<=247; addr++) {
+                if (!addrs.includes(addr))
+                    break;
+            }
 
-        data.modAddress = addr
+            data.modAddress = addr
+        }
 
         if (req.query.action) {
             if (req.query.action == "groupAdd") {
@@ -105,9 +107,12 @@ function modifyModule(req, res) {
 
             else {
                 db.modules.find({ _id: req.query.modID }, function(err, docs) {
-                    data.modName = docs[0].modName,
-                    // data.modAddress = docs[0].modAddress,
-                    data.modModel = docs[0].modModel,
+                    data.modName = docs[0].modName
+
+                    if (req.query.action == "Modify")
+                        data.modAddress = docs[0].modAddress
+                    
+                    data.modModel = docs[0].modModel
                     data.groupID = docs[0].groupID   
 
                     gen(req.query.action+" module", req.query.action)
