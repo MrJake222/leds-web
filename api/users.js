@@ -2,10 +2,10 @@ db = require("../database/db")
 
 // --------------------------------------------------------------------------------
 function checkLogin(req, res) {
-    console.log("checkLogin: " + req.body.login)
+    // console.log("checkLogin: " + req.body.login)
 
     db.users.find({login: req.body.login}, function(err, docs) {
-        console.log(docs)
+        // console.log(docs)
 
         if (docs.length > 0) {
             res.send({error: true})
@@ -86,7 +86,7 @@ function login(req, res) {
                 else {
                     req.session.login = req.body.login
 
-                    console.log(req.session)
+                    // console.log(req.session)
 
                     res.redirect("/user?id="+docs[0]._id)
                 }

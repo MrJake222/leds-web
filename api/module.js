@@ -123,8 +123,8 @@ function gamma(val) {
 function updateLeds(req, res) {
     var updateSet = {}
 
-    if (req.body.databaseUpdate == "true")
-        console.log(req.body)
+    /* if (req.body.databaseUpdate == "true")
+        console.log(req.body) */
 
     if (req.body.inputValue != undefined)
         updateSet[req.body.inputName] = parseInt(req.body.inputValue)
@@ -193,6 +193,8 @@ function dim(req, res) {
         // console.log(value)
 
         modbus.writeSingleRegister(docs[0].modAddress, 0x0005, value, time+100)
+
+        res.send("")
     })
 }
 

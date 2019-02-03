@@ -135,9 +135,6 @@ function updateHeader(mod) {
 }
 
 function updateLeds(mod, inputName, databaseUpdate) {
-    if (databaseUpdate)
-        console.log("Tx: ", mod.id, inputName, mod.values[inputName])
-
     updateHeader(mod)
 
     // ----------------------------------------------- //
@@ -146,9 +143,6 @@ function updateLeds(mod, inputName, databaseUpdate) {
         databaseUpdate: databaseUpdate,
         inputName: inputName,
         inputValue: mod.values[inputName]
-    }, function(data) {
-        if (databaseUpdate)
-            console.log("Rx: ", mod.id, inputName, mod.values[inputName], data)
     })
 }
 
