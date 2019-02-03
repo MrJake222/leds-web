@@ -2,7 +2,6 @@ main {
     padding: 0;
 
     display: flex;
-    flex-direction: row;
 }
 
 header {
@@ -10,21 +9,21 @@ header {
     padding-bottom: 12px;
 }
 
+/* Group name, buttons and .modules */
 .group {
-    width: calc(100% - 220px);
-
     flex-grow: 1;
     padding: 12px;
     padding-bottom: 0;
 }
 
+/* Presets pane(presets, .selects) */
 .presets {
-    width: 220px;
     padding-top: 2px;
 
     /* border-left: 1px solid #34393f; */
 }
 
+/* All presets and .selects */
 .presets > * {
     width: 100%;
 
@@ -41,37 +40,25 @@ header {
     transition: border-color 0.4s;
 }
 
-label {
-    position: relative;
-    top: 1px;
-}
-
+/* Remove icon color */
 .presets a {
     color: #34393f;
 }
 
+/* Icon */
 .presets .icon {
     position: relative;
     top: 4px;
 }
 
+/* .pre(Checkboxes and labels), .buttons */
 .selects {
-    /* width: calc(100% - 61px); */
-
-    /* display: none; */
-    /* margin: 0 30px; */
     margin-top: 12px;
 
     text-align: center;
-    /* border: 1px solid; */
-    
-    /* box-sizing: content-box; */
 }
 
-.pre {
-    margin: 0 29px;
-}
-
+/* Input label pair */
 .select {
     display: flex;
     justify-content: left;
@@ -80,22 +67,122 @@ label {
 .select input {
     margin-right: 12px;
     /* margin-left: 18px; */
+    
+    width: 20px;
+    height: 20px;
 }
 
+label {
+    position: relative;
+    bottom: 3px;
+}
+
+/* Tour off, Accept buttons */
 .buttons {
     display: flex;
     justify-content: space-between;
 }
 
 .selects button {    
-    width: calc(50% - 6px);
-
     padding: 2px 0;
-    margin-top: 12px;
 
     letter-spacing: 1px;
     font-size: 16px;
     font-style: italic;
+}
+
+.selects button::-moz-focus-inner {
+    border: 0;
+}
+
+.selects button {
+    background: linear-gradient(#f2f2f3, #e8e9ea);
+    border: 1px solid #c0c2c4;
+    
+    transition : border-color 500ms;
+    /* transition : background 500ms; */
+    
+    border-radius: 2px;
+
+    outline: none;
+}
+
+.selects button:hover {
+    border-color: #93CEE9;
+}
+
+.selects button:active {
+    background: linear-gradient(#7BC3E4, #98D0EA);
+
+    border-color: #89CAE7;
+}
+
+/* Desktop */
+@media screen and (min-width: 720px) {
+    .presets {
+        width: 220px;
+    }
+
+    .group {
+        width: calc(100% - 220px);
+    }
+
+    .selects button {
+        width: calc(50% - 6px);
+
+        padding: 7px 0;
+        margin-top: 12px;
+    }
+
+    .select {
+        margin: 8px 0;
+    }
+
+    /* All checkboxes */
+    .pre {
+        margin: 0 29px;
+    }
+
+    /* Label for checkbox */
+/*     label {
+        position: relative;
+        top: 1px;
+    } */
+}
+
+/* Mobile */
+@media screen and (max-width: 720px) {
+    main {
+        flex-direction: column-reverse;
+    }
+    
+    .selects {
+        display: flex;
+    }
+
+    .pre {
+        padding-left: 29px;
+        width: 50%;
+    }
+    
+    .buttons {
+        width: 70%;
+
+        flex-direction: column;
+
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .selects button {
+        width: 70%;
+
+        padding: 7px 12px;
+    }
+
+    .select, .selects button {
+        margin: 12px 0;
+    }
 }
 
 .noselect {

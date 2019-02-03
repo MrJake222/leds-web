@@ -1,0 +1,28 @@
+{
+  "name": "leds-web",
+  "version": "1.1.0",
+  "description": "Web interface for RGB leds",
+  "main": "app.js",
+  "dependencies": {
+    "connect-nedb-session": "^0.0.3",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "nedb": "^1.8.0",
+    "pug": "^2.0.3",
+    "serialport": "^7.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrJake222/leds-web.git"
+  },
+  "author": "Norbert Morawski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrJake222/leds-web/issues"
+  },
+  "homepage": "https://github.com/MrJake222/leds-web#readme"
+}
