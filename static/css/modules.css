@@ -5,27 +5,27 @@ main {
     flex-direction: row;
 }
 
-/* Contains group div(group name and modules) and presets menu on the right */
-/* .groupPresets {
-    display: flex;
-    flex-direction: row;
-} */
-
-.group, .presets {
+header {
+    padding: 0;
+    padding-bottom: 12px;
 }
 
 .group {
+    width: calc(100% - 220px);
+
     flex-grow: 1;
     padding: 12px;
+    padding-bottom: 0;
 }
 
 .presets {
-    width: 350px;
+    width: 220px;
+    padding-top: 2px;
 
     /* border-left: 1px solid #34393f; */
 }
 
-.presets>* {
+.presets > * {
     width: 100%;
 
     padding: 9px 22px;
@@ -35,7 +35,15 @@ main {
     position: relative;
 
     font-size: 22px;
-    letter-spacing: 2px;   
+    letter-spacing: 2px;  
+    cursor: pointer;
+
+    transition: border-color 0.4s;
+}
+
+label {
+    position: relative;
+    top: 1px;
 }
 
 .presets a {
@@ -46,6 +54,64 @@ main {
     position: relative;
     top: 4px;
 }
+
+.selects {
+    /* width: calc(100% - 61px); */
+
+    /* display: none; */
+    /* margin: 0 30px; */
+    margin-top: 12px;
+
+    text-align: center;
+    /* border: 1px solid; */
+    
+    /* box-sizing: content-box; */
+}
+
+.pre {
+    margin: 0 29px;
+}
+
+.select {
+    display: flex;
+    justify-content: left;
+}
+
+.select input {
+    margin-right: 12px;
+    /* margin-left: 18px; */
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.selects button {    
+    width: calc(50% - 6px);
+
+    padding: 2px 0;
+    margin-top: 12px;
+
+    letter-spacing: 1px;
+    font-size: 16px;
+    font-style: italic;
+}
+
+.noselect {
+    -webkit-touch-callout: none;    /*  iOS Safari */
+    -webkit-user-select: none;      /*  Safari */
+    -khtml-user-select: none;       /*  Konqueror HTML */
+    -moz-user-select: none;         /*  Firefox */
+    -ms-user-select: none;          /*  Internet Explorer/Edge */
+    user-select: none;              /*  Non-prefixed version, currently
+                                        supported by Chrome and Opera */
+}
+
+/* .select div {
+    width: 50%;
+    padding: 0 12px;
+} */
 
 /* Modules div */
 .modules {

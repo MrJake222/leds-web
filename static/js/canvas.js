@@ -135,6 +135,9 @@ function updateHeader(mod) {
 }
 
 function updateLeds(mod, inputName, databaseUpdate) {
+    if (databaseUpdate)
+        console.log("Tx: ", mod.id, inputName, mod.values[inputName])
+
     updateHeader(mod)
 
     // ----------------------------------------------- //
@@ -143,6 +146,9 @@ function updateLeds(mod, inputName, databaseUpdate) {
         databaseUpdate: databaseUpdate,
         inputName: inputName,
         inputValue: mod.values[inputName]
+    }, function(data) {
+        if (databaseUpdate)
+            console.log("Rx: ", mod.id, inputName, mod.values[inputName], data)
     })
 }
 
@@ -373,6 +379,9 @@ function mouseUp(ev) {
     // ev.target.ontouchmove = null
 
     mouseMove(ev)
+
+    ev.preventDefault()
+    ev.stopPropagation()
 }
 
 function touchStart(ev) {
@@ -426,7 +435,7 @@ function clickLightness(ev) {
     ev.preventDefault()
 }
 
-function dblClick(ev) {
+function dblClick(ev, cb) {
     // console.log(ev.type)
 
     var mod = getMod(ev.target)
@@ -467,5 +476,7 @@ function dblClick(ev) {
         }
 
         updateLeds(mod, cls, true)
+
+        if (cb) cb()
     })
 }

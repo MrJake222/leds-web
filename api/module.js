@@ -123,48 +123,59 @@ function gamma(val) {
 function updateLeds(req, res) {
     var updateSet = {}
 
+    if (req.body.databaseUpdate == "true")
+        console.log(req.body)
+
     if (req.body.inputValue != undefined)
         updateSet[req.body.inputName] = parseInt(req.body.inputValue)
 
-    if (req.body.databaseUpdate == "true") {
-        db.modules.update({ _id: req.body.modID }, { $set: updateSet }, {})
-    }
-
-    if (req.body.inputName == "lastlightness" && req.body.databaseUpdate == "true") {
-        res.send("")
-        return
-    }
-
-    db.modules.find({ _id: req.body.modID }, function(err, docs) {
-        if (err)
-            throw err
-
-        // var registerAddress = modules.models[docs[0].modModel].registers[req.body.name]
-        // var gamma = Math.round( (req.body.value*req.body.value) / 255 )
-
-        var mod = docs[0]
-        
-        if (req.body.inputName == "lastlightness")
-            mod["lightness"] = mod["lastlightness"]
-        else
-            mod[req.body.inputName] = updateSet[req.body.inputName]
-
-        var rgb = hslToRgb(mod.hue/360, mod.saturation/100, mod.lightness/100)
-
-        if (req.body.inputName == "lastlightness") {
-            for (let i=0; i<3; i++)
-                rgb[i] |= 0x0100
+    var process = function() {
+        if (req.body.inputName == "lastlightness" && req.body.databaseUpdate == "true") {
+            res.send("")
+            return
         }
 
-        /* for (let i=0; i<3; i++)
-            rgb[i] = gamma(rgb[i]) */
+        db.modules.find({ _id: req.body.modID }, function(err, docs) {
+            if (err)
+                throw err
 
-        // console.log(rgb)
+            // var registerAddress = modules.models[docs[0].modModel].registers[req.body.name]
+            // var gamma = Math.round( (req.body.value*req.body.value) / 255 )
 
-        modbus.writeMultipleRegisters(docs[0].modAddress, 0x0000, rgb)
-    })
+            var mod = docs[0]
+            
+            if (req.body.inputName == "lastlightness")
+                mod["lightness"] = mod["lastlightness"]
+            else
+                mod[req.body.inputName] = updateSet[req.body.inputName]
 
-    res.send("")
+            var rgb = hslToRgb(mod.hue/360, mod.saturation/100, mod.lightness/100)
+
+            if (req.body.inputName == "lastlightness") {
+                for (let i=0; i<3; i++)
+                    rgb[i] |= 0x0100
+            }
+
+            /* for (let i=0; i<3; i++)
+                rgb[i] = gamma(rgb[i]) */
+
+            // console.log(rgb)
+
+            modbus.writeMultipleRegisters(docs[0].modAddress, 0x0000, rgb)
+        })
+
+        res.send("")
+    }
+
+    if (req.body.databaseUpdate == "true") {
+        db.modules.update({ _id: req.body.modID }, { $set: updateSet }, {}, function() {
+            process()
+        })
+    }
+
+    else {
+        process()
+    }
 }
 
 function dim(req, res) {

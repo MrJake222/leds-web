@@ -64,20 +64,23 @@ function group(req, res) {
                     return a.modAddress - b.modAddress
                 })
 
-                db.preset.find({ login: req.session.login }, function(err, docsPresets) {
-                    console.log(docsPresets)
+                db.users.find({ login: req.session.login }, function(err, docsUsers) {
 
-                    // Generate menu
-                    menu.generateMenu(req.session.login, function(baseMenu) {
-                        res.render("modules", {
-                            menu: baseMenu,
-                            
-                            groupID: docsGroup[0]._id,
-                            groupName: docsGroup[0].groupName,
+                    db.preset.find({ userID: docsUsers[0]._id }, function(err, docsPresets) {
+                        // console.log(docsPresets)
 
-                            mods: docsMods,
-                            presets: docsPresets
-                            // properties: modules.models,
+                        // Generate menu
+                        menu.generateMenu(req.session.login, function(baseMenu) {
+                            res.render("modules", {
+                                menu: baseMenu,
+                                
+                                groupID: docsGroup[0]._id,
+                                groupName: docsGroup[0].groupName,
+
+                                mods: docsMods,
+                                presets: docsPresets
+                                // properties: modules.models,
+                            })
                         })
                     })
                 })

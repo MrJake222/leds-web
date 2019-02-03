@@ -8,18 +8,20 @@ function modifyPreset(req, res) {
 
         switch (req.body.action.toLowerCase()) {
             case "add":
-                var data = {
-                    login: req.session.login,
-                    name: req.body.name
-                }
+                db.users.find({ login: req.session.login }, function(err, docsUsers) {
+                    var data = {
+                        userID: docsUsers[0]._id,
+                        name: req.body.name
+                    }
 
-                modules.models[docs[0].modModel].inputs.forEach(function(input) {
-                    data[input] = docs[0][input]
-                })
+                    modules.models[docs[0].modModel].inputs.forEach(function(input) {
+                        data[input] = docs[0][input]
+                    })
 
-                // console.log(data)
-                db.preset.insert(data, function() {
-                    res.send("")
+                    // console.log(data)
+                    db.preset.insert(data, function() {
+                        res.send("")
+                    })
                 })
                 
                 break

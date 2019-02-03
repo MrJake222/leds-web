@@ -22,7 +22,7 @@ function writeModule(address, data, timeout) {
 }
 
 // --------------------------------------------------------------------------------
-function writeSingleRegister(address, register16, value16, timeout=200) {
+function writeSingleRegister(address, register16, value16, timeout=100) {
     const func_code = 0x06
 
     writeModule(address, [func_code].concat(to8Bit(register16)).concat(to8Bit(value16)), timeout)
@@ -30,7 +30,7 @@ function writeSingleRegister(address, register16, value16, timeout=200) {
 
 // --------------------------------------------------------------------------------
 // modbus.writeMultipleRegisters(docs[0].modAddress, 0x0000, rgb)
-function writeMultipleRegisters(address, startingRegister, values, timeout=200) {
+function writeMultipleRegisters(address, startingRegister, values, timeout=100) {
     const func_code = 0x10
 
     var data = [func_code]

@@ -4,7 +4,7 @@ block head
     link(rel='stylesheet', href='css/modules.css')
     script(src="js/canvas.js")
     script(src="js/sweep.js")
-    //- script(src="js/preset.js")
+    script(src="js/preset.js")
     //- script(src="js/range.js")
     //- script(src="js/ajax.js")
 
@@ -51,6 +51,7 @@ block head
             }, function() {
                 location.reload()
             })
+            console.log("deletePreset")
         }
 
     title= groupName
@@ -86,9 +87,24 @@ block main
                                 canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", onclick="clickLightness(event)", data-value=mod.lightness, data-lastlightness=mod.lastlightness)
     .presets
         for preset in presets
-            div(style="background-color: hsl("+preset.hue+", "+preset.saturation+"%, "+preset.lightness+"%);")= preset.name
+            //- , onmouseenter="hoverPreser(event)", onmouseleave="hoverPreser(event)"
+            - var color = "hsl("+preset.hue+", "+preset.saturation+"%, "+preset.lightness+"%)"
+            //- - var color2 = "hsl("+preset.hue+", "+(preset.saturation-30)+"%, "+(preset.lightness-30)+"%)"
+            //- - var color2 = "black"
+            div.noselect(onclick="presetSelect(event)", data-hue=preset.hue, data-saturation=preset.saturation, data-lightness=preset.lightness, style="background-color: "+color+"; border: 3px solid "+color+";")= preset.name
                 div.icons-absolute.icons-absolute-right
                     a.icon.delete(title="Delete group", onclick="deletePreset('"+preset._id+"')") x
+        .selects
+            .pre
+                - opt = 0
+                for mod in mods
+                    .select
+                        input(type="checkbox", id="opt"+opt, name=mod._id)
+                        label.noselect(for="opt"+opt)= mod.modName
+                        - opt++
+            .buttons
+                button(onclick="modulesTurnOff(event)") Turn off
+                button(onclick="presetAccept(event)") Accept
 
     script.
         initCanvas()
