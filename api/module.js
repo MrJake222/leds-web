@@ -169,7 +169,8 @@ function updateLeds(req, res) {
 
     if (req.body.databaseUpdate == "true") {
         db.modules.update({ _id: req.body.modID }, { $set: updateSet }, {}, function() {
-            process()
+            // process()
+            res.send("")
         })
     }
 

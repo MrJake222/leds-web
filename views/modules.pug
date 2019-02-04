@@ -80,11 +80,11 @@ block main
                                 a.icon(title="Save preset", onclick="addPreset('"+mod._id+"')") 🖫
 
                         div.canvasContainer.canvasContainerHeigth(id=mod._id)
-                            canvas.hue(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.hue)
+                            canvas.hue(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="mouseUp(event)", data-value=mod.hue)
 
                             div.side
-                                canvas.saturation(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", data-value=mod.saturation)
-                                canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="touchEnd(event)", onclick="clickLightness(event)", data-value=mod.lightness, data-lastlightness=mod.lastlightness)
+                                canvas.saturation(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="mouseUp(event)", data-value=mod.saturation)
+                                canvas.lightness(onmousedown="mouseDown(event)", ontouchstart="touchStart(event)", ontouchend="mouseUp(event)", data-value=mod.lightness, data-lastlightness=mod.lastlightness)
     .presets
         for preset in presets
             //- , onmouseenter="hoverPreser(event)", onmouseleave="hoverPreser(event)"

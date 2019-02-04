@@ -43,13 +43,13 @@ function handleNextFrame(append) {
 
     var frameData = framebuffer.shift()
 
-    // console.log(frameData)
+    console.log(frameData.frame)
 
     serial.write(frameData.frame, function() {
         if (frameData.frame[0]) {
             currentTimeout = setTimeout(function() {
                 currentTimeout = null
-                console.log("Timeout ", frameData.frame)
+                // console.log("Timeout ", frameData.frame)
 
                 blockSerial = false
                 handleNextFrame("timeout")

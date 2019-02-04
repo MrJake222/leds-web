@@ -351,7 +351,7 @@ function mouseMove(ev, first=false) {
     ev.preventDefault()
 }
 
-function mouseDown(ev) {
+function startDrag(ev) {
     // console.log(ev.type)
 
     currentCanvas = ev.target
@@ -359,18 +359,18 @@ function mouseDown(ev) {
     window.onmousemove = mouseMove
     window.onmouseup = mouseUp
 
-    // ev.target.ontouchmove = mouseMove
+    ev.target.ontouchmove = mouseMove
 
     mouseMove(ev, true)
 }
 
-function mouseUp(ev) {
+function stopDrag(ev) {
     // console.log(ev.type)
 
     window.onmousemove = null
     window.onmouseup = null
 
-    // ev.target.ontouchmove = null
+    ev.target.ontouchmove = null
 
     mouseMove(ev)
 
@@ -378,7 +378,7 @@ function mouseUp(ev) {
     ev.stopPropagation()
 }
 
-function touchStart(ev) {
+/* function touchStart(ev) {
     // console.log(ev.type)
 
     currentCanvas = ev.target
@@ -401,13 +401,126 @@ function touchEnd(ev) {
     // console.log(firstClick, clickTimer)
     if (clickTimer)
         mouseMove(ev)
-}
+} */
 
 // --------------------------------------------------------------------------------
 var firstClick = true
-var clickTimer
+var singleClickTimeout
+var doubleClickTimeout
 
-function clickLightness(ev) {
+var waitForRelease = false
+
+var drag = false
+
+function mouseDown(ev) {
+    console.log(ev.type, firstClick)
+
+    if (firstClick) {
+        singleClickTimeout = setTimeout(function() {
+            singleClickTimeout = null
+
+            console.log("drag start")
+            startDrag(ev)
+        }, 200)
+
+        firstClick = false
+
+        doubleClickTimeout = setTimeout(function() {
+            doubleClickTimeout = null
+
+            firstClick = true
+        }, 800)
+    }
+
+    else {
+        waitForRelease = true
+    }
+
+    window.onmouseup = mouseUp
+}
+
+function mouseUp(ev) {
+    if (singleClickTimeout) {
+        clearTimeout(singleClickTimeout)
+    }
+
+    else {
+        console.log("drag stop")
+        stopDrag(ev)
+
+        firstClick = true
+    }
+
+    if (doubleClickTimeout && waitForRelease) {
+        waitForRelease = false
+        clearTimeout(doubleClickTimeout)
+        doubleClickTimeout = null
+        firstClick = true
+
+        console.log("dbl release")
+        
+        if (ev.target.classList[0] == "lightness")
+            dblClick(ev)
+    }
+
+    window.onmouseup = null
+}
+
+function touchStart(ev) {
+    mouseDown(ev)
+
+    ev.stopPropagation()
+    ev.preventDefault()
+}
+
+/* function mouseDown(ev) {
+    window.onmouseup = mouseUp
+
+    if (firstClick) {
+        firstClick = false
+
+        singleClickTimeout = setTimeout(function() {
+            console.log("Starting drag")
+
+            drag = true
+
+            clearTimeout(doubleClickTimeout)
+            doubleClickTimeout = null
+            // singleClickTimeout = null
+        }, 300)
+
+        doubleClickTimeout = setTimeout(function() {
+            firstClick = false
+        }, 800)
+    }
+
+    else {
+        clearTimeout(doubleClickTimeout)
+        doubleClickTimeout = null
+
+        // console.log("Double click")
+    }
+}
+
+function mouseUp(ev) {
+    // console.log(firstClick)
+    
+    clearTimeout(singleClickTimeout)
+
+    if (!firstClick && drag) {
+        console.log("Stopping drag")
+
+        firstClick = true
+    }
+
+    if (doubleClickTimeout) {
+        console.log("Double click")
+    }
+
+    window.onmouseup = null
+} */
+
+/* function clickLightness(ev) {
     // console.log("click")
 
     if (firstClick) {
@@ -427,7 +540,7 @@ function clickLightness(ev) {
     }
 
     ev.preventDefault()
-}
+} */
 
 function dblClick(ev, cb) {
     // console.log(ev.type)
