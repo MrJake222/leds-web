@@ -1,8 +1,8 @@
 const SerialPort = require("serialport")
 const fastCRC = require("./fastCRC")
 
-// var portPath = process.argv[2]
-var portPath = "/dev/ttyS0"
+var portPath = process.argv[2]
+// var portPath = "/dev/ttyS0"
 
 var serial = new SerialPort(portPath, {
     autoOpen: true,
@@ -43,13 +43,13 @@ function handleNextFrame(append) {
 
     var frameData = framebuffer.shift()
 
-    console.log(frameData.frame)
+    // console.log(frameData.frame)
 
     serial.write(frameData.frame, function() {
         if (frameData.frame[0]) {
             currentTimeout = setTimeout(function() {
                 currentTimeout = null
-                // console.log("Timeout ", frameData.frame)
+                console.log("Timeout ", frameData.frame)
 
                 blockSerial = false
                 handleNextFrame("timeout")
